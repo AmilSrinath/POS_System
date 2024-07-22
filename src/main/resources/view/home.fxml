@@ -1,14 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="pos.system.project.controller.HomeController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="home" prefHeight="1024.0" prefWidth="1681.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.HomeController">
+   <children>
+      <Button fx:id="btnItems" contentDisplay="TOP" layoutX="752.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnItemsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Items" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-item-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnReports" contentDisplay="TOP" layoutX="1395.0" layoutY="413.0" mnemonicParsing="false" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Reports" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-report-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar" stylesheets="@../Styles/CSS.css">
+         <children>
+            <Label layoutX="1171.0" layoutY="35.0" text="Date" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="1240.0" layoutY="35.0" text="12-12-2024" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="1419.0" layoutY="35.0" text="Time" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="1489.0" layoutY="35.0" text="13:45" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="22.0" />
+               </font>
+            </Label>
+            <Label layoutX="129.0" layoutY="30.0" text="Name Of Shop" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="29.0" />
+               </font>
+            </Label>
+         </children></AnchorPane>
+      <Button fx:id="btnCustomers" contentDisplay="TOP" layoutX="1074.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnCustomersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Customers" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-customer-insights-manager-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnUsers" contentDisplay="TOP" layoutX="435.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnUsersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Users" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-user-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnOrders" contentDisplay="TOP" layoutX="435.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnOrdersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Orders" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-order-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnSettings" contentDisplay="TOP" layoutX="1074.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnSettingsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Settings" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-setting-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnDashboard" contentDisplay="TOP" layoutX="137.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnDashboardOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Dashboard" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnEmployees" contentDisplay="TOP" layoutX="1395.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnEmployeesOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Employees" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-employee-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnPayments" contentDisplay="TOP" layoutX="137.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPaymentsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Payments" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-payment-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnConfiguration" contentDisplay="TOP" layoutX="752.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnConfigurationOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Configuration" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-configuration-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Log Out" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-logout-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+   </children>
 </AnchorPane>
