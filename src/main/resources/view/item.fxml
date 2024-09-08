@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1024.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.ItemController">
+<AnchorPane prefHeight="1024.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.ItemController" styleClass="root" stylesheets="@../Styles/CSS.css">
    <children>
-      <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar" stylesheets="@../Styles/CSS.css">
+      <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
          <children>
             <Label layoutX="1171.0" layoutY="35.0" text="Date" textFill="WHITE">
                <font>

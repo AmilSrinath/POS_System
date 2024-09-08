@@ -54,8 +54,14 @@ public class HomeController {
     private final Stage stage = new Stage();
 
     @FXML
-    void btnConfigurationOnAction(ActionEvent event) {
-
+    void btnConfigurationOnAction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/configuration.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
     }
 
     @FXML
@@ -119,17 +125,46 @@ public class HomeController {
     }
 
     @FXML
-    void btnPaymentsOnAction(ActionEvent event) {
-
+    void btnPaymentsOnAction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/payment.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
     }
 
     @FXML
-    void btnSettingsOnAction(ActionEvent event) {
-
+    void btnSettingsOnAction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/setting.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
     }
 
     @FXML
-    void btnUsersOnAction(ActionEvent event) {
+    void btnUsersOnAction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/user.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
+    }
 
+    @FXML
+    public void btnReportsOnAction(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/report.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
     }
 }

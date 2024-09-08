@@ -5,6 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import pos.system.project.util.FactoryConfiguration;
+
+import java.io.IOException;
 
 /**
  * @author Amil Srinath
@@ -12,6 +17,16 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        Session session;
+        try {
+            session = FactoryConfiguration.getInstance().getSession();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Transaction transaction = session.beginTransaction();
+        transaction.commit();
+        session.close();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home.fxml"));
         Parent root = loader.load();
 

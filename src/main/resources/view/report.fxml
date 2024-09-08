@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1024.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.OrderController" styleClass="root" stylesheets="@../Styles/CSS.css">
+<AnchorPane prefHeight="1024.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.ReportController" styleClass="root" stylesheets="@../Styles/CSS.css">
    <children>
       <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
          <children>
@@ -32,7 +32,7 @@
                   <Font name="Poppins Regular" size="22.0" />
                </font>
             </Label>
-            <Label layoutX="129.0" layoutY="30.0" text="Orders" textFill="WHITE">
+            <Label layoutX="129.0" layoutY="30.0" text="Report" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="29.0" />
                </font>
@@ -51,7 +51,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <Label layoutX="792.0" layoutY="491.0" text="Orders">
+      <Label layoutX="792.0" layoutY="491.0" text="Report">
          <font>
             <Font name="Poppins Regular" size="29.0" />
          </font>

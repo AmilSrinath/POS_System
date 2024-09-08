@@ -1,22 +1,23 @@
-/*color variables*/
-
-
+.root {
+    -fx-base-color: #c9184a;
+    -fx-hover-color: #a1153b;
+}
 
 .home-top-bar {
-    -fx-background-color: #c9184a;
+    -fx-background-color: -fx-base-color;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
 }
 
 .home-buttons {
-    -fx-background-color: #c9184a;
+    -fx-background-color: -fx-base-color;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
 }
 
 .home-buttons:hover {
-    -fx-background-color: #a1153b;
+    -fx-background-color: -fx-hover-color;
 }
 
-.back-button{
+.back-button {
     -fx-background-color: transparent;
     -fx-border-color: white;
     -fx-border-width: 1;
@@ -24,6 +25,6 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
 }
 
-.back-button:hover{
-    -fx-background-color: #a1153b;
+.back-button:hover {
+    -fx-background-color: -fx-hover-color;
 }

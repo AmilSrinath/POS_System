@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="home" prefHeight="1024.0" prefWidth="1681.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.HomeController">
+<AnchorPane fx:id="home" prefHeight="1080.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.HomeController" styleClass="root" stylesheets="@../Styles/CSS.css">
    <children>
-      <Button fx:id="btnItems" contentDisplay="TOP" layoutX="752.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnItemsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Items" textFill="WHITE">
+      <Button fx:id="btnItems" contentDisplay="TOP" layoutX="752.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnItemsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Items" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -21,7 +21,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnReports" contentDisplay="TOP" layoutX="1395.0" layoutY="413.0" mnemonicParsing="false" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Reports" textFill="WHITE">
+      <Button fx:id="btnReports" contentDisplay="TOP" layoutX="1395.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnReportsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Reports" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -33,7 +33,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar" stylesheets="@../Styles/CSS.css">
+      <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
          <children>
             <Label layoutX="1171.0" layoutY="35.0" text="Date" textFill="WHITE">
                <font>
@@ -60,8 +60,9 @@
                   <Font name="Poppins Regular" size="29.0" />
                </font>
             </Label>
-         </children></AnchorPane>
-      <Button fx:id="btnCustomers" contentDisplay="TOP" layoutX="1074.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnCustomersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Customers" textFill="WHITE">
+         </children>
+      </AnchorPane>
+      <Button fx:id="btnCustomers" contentDisplay="TOP" layoutX="1074.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnCustomersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Customers" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -73,7 +74,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnUsers" contentDisplay="TOP" layoutX="435.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnUsersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Users" textFill="WHITE">
+      <Button fx:id="btnUsers" contentDisplay="TOP" layoutX="435.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnUsersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Users" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -85,7 +86,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnOrders" contentDisplay="TOP" layoutX="435.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnOrdersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Orders" textFill="WHITE">
+      <Button fx:id="btnOrders" contentDisplay="TOP" layoutX="435.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnOrdersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Orders" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -97,7 +98,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnSettings" contentDisplay="TOP" layoutX="1074.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnSettingsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Settings" textFill="WHITE">
+      <Button fx:id="btnSettings" contentDisplay="TOP" layoutX="1074.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnSettingsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Settings" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -109,7 +110,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnDashboard" contentDisplay="TOP" layoutX="137.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnDashboardOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Dashboard" textFill="WHITE">
+      <Button fx:id="btnDashboard" contentDisplay="TOP" layoutX="137.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnDashboardOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Dashboard" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -121,7 +122,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnEmployees" contentDisplay="TOP" layoutX="1395.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnEmployeesOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Employees" textFill="WHITE">
+      <Button fx:id="btnEmployees" contentDisplay="TOP" layoutX="1395.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnEmployeesOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Employees" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -133,7 +134,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnPayments" contentDisplay="TOP" layoutX="137.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPaymentsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Payments" textFill="WHITE">
+      <Button fx:id="btnPayments" contentDisplay="TOP" layoutX="137.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPaymentsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Payments" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -145,7 +146,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnConfiguration" contentDisplay="TOP" layoutX="752.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnConfigurationOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Configuration" textFill="WHITE">
+      <Button fx:id="btnConfiguration" contentDisplay="TOP" layoutX="752.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnConfigurationOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Configuration" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -157,7 +158,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" stylesheets="@../Styles/CSS.css" text="Log Out" textFill="WHITE">
+      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Log Out" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
