@@ -68,8 +68,8 @@ public class CustomerController {
     public Button btnBack;
 
     public void initialize() throws IOException {
-        setTime();
-        setDate();
+        TimeNow();
+        lblDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         getAllCustomers();
     }
 
@@ -88,39 +88,6 @@ public class CustomerController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void setTime(){
-        Thread thread = new Thread(() ->{
-            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-            while (!false){
-                try {
-                    Thread.sleep(1000);
-                }catch (Exception e){}
-                final String timenow = sdf.format(new Date());
-                Platform.runLater(() ->{
-                    lblTime.setText(timenow);
-                });
-            }
-        });
-        thread.start();
-    }
-
-    private void setDate() {
-        Thread thread = new Thread(() -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            while (!false) {
-                try {
-                    Thread.sleep(1000);
-                } catch (Exception e) {
-                }
-                final String datenow = sdf.format(new Date());
-                Platform.runLater(() -> {
-                    lblDate.setText(datenow);
-                });
-            }
-        });
-        thread.start();
     }
 
     public void AddOnAction(ActionEvent actionEvent) throws IOException {
@@ -151,6 +118,11 @@ public class CustomerController {
     }
 
     public void EditOnAction(ActionEvent actionEvent) throws IOException {
+        if (currentSelectedId == -1) {
+            new Alert(Alert.AlertType.ERROR, "Please select a customer...!").show();
+            return;
+        }
+
         ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
         ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
         Optional<ButtonType> result = new Alert(Alert.AlertType.INFORMATION, "Are you sure to edit?", yes, no).showAndWait();
@@ -169,9 +141,15 @@ public class CustomerController {
         }
         ClearOnAction(actionEvent);
         getAllCustomers();
+        currentSelectedId = -1;
     }
 
     public void DeleteOnAction(ActionEvent actionEvent) throws IOException {
+        if (currentSelectedId == -1) {
+            new Alert(Alert.AlertType.ERROR, "Please select a customer...!").show();
+            return;
+        }
+
         ButtonType yes = new ButtonType("Yes", ButtonBar.ButtonData.OK_DONE);
         ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
         Optional<ButtonType> result = new Alert(Alert.AlertType.INFORMATION, "Are you sure to remove?", yes, no).showAndWait();
@@ -181,6 +159,7 @@ public class CustomerController {
             ClearOnAction(actionEvent);
         }
         getAllCustomers();
+        currentSelectedId = -1;
     }
 
     public void getAllCustomers() throws IOException {
@@ -223,5 +202,21 @@ public class CustomerController {
         cusAddress.clear();
         cusNIC.clear();
         cusDOB.setValue(null);
+    }
+
+    private void TimeNow(){
+        Thread thread = new Thread(() ->{
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+            while (!false){
+                try {
+                    Thread.sleep(1000);
+                }catch (Exception e){}
+                final String timenow = sdf.format(new Date());
+                Platform.runLater(() ->{
+                    lblTime.setText(timenow);
+                });
+            }
+        });
+        thread.start();
     }
 }

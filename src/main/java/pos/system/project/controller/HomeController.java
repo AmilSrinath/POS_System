@@ -19,6 +19,9 @@ public class HomeController {
     public AnchorPane home;
 
     @FXML
+    public Button btnCategory;
+
+    @FXML
     private Button btnConfiguration;
 
     @FXML
@@ -160,6 +163,17 @@ public class HomeController {
     @FXML
     public void btnReportsOnAction(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/report.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
+    }
+
+    @FXML
+    public void btnCategoryOnAction(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/category.fxml"));
         AnchorPane anchorPane = loader.load();
         Scene scene = new Scene(anchorPane);
         stage.setScene(scene);

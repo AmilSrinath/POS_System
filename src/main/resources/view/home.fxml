@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="home" prefHeight="1080.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.HomeController" styleClass="root" stylesheets="@../Styles/CSS.css">
+<AnchorPane fx:id="home" prefHeight="1080.0" prefWidth="1680.0" styleClass="root" stylesheets="@../Styles/CSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.HomeController">
    <children>
       <Button fx:id="btnItems" contentDisplay="TOP" layoutX="752.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnItemsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Items" textFill="WHITE">
          <graphic>
@@ -158,7 +158,19 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Log Out" textFill="WHITE">
+      <Button fx:id="btnCategory" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnCategoryOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Category" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-category-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="435.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Log Out" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>

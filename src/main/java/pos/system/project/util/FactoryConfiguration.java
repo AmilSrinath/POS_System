@@ -3,20 +3,24 @@ package pos.system.project.util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import pos.system.project.entity.Customer;
+import pos.system.project.entity.*;
 
 import java.io.IOException;
 import java.util.Properties;
 
 public class FactoryConfiguration {
     private static FactoryConfiguration factoryConfiguration;
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
     private FactoryConfiguration() throws IOException {
         Configuration configuration = new Configuration();
         Properties properties = new Properties();
         properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("hibernate.properties"));
         configuration.setProperties(properties);
         configuration.addAnnotatedClass(Customer.class);
+        configuration.addAnnotatedClass(Item.class);
+        configuration.addAnnotatedClass(Order.class);
+        configuration.addAnnotatedClass(OrderDetail.class);
+        configuration.addAnnotatedClass(User.class);
         sessionFactory = configuration.buildSessionFactory();
     }
 

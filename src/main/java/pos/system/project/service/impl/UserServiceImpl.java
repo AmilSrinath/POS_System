@@ -3,10 +3,10 @@ package pos.system.project.service.impl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
-import pos.system.project.dto.CustomerDTO;
+import pos.system.project.dto.UserDTO;
 import pos.system.project.entity.Customer;
 import pos.system.project.entity.User;
-import pos.system.project.service.CustomerService;
+import pos.system.project.service.UserService;
 import pos.system.project.util.FactoryConfiguration;
 
 import java.io.IOException;
@@ -15,20 +15,16 @@ import java.util.List;
 /**
  * @author Amil Srinath
  */
-public class CustomerSerivceImpl implements CustomerService {
+public class UserServiceImpl implements UserService {
     @Override
-    public int Add(CustomerDTO customerDTO) throws IOException {
-        // Create a new Customer object without manually setting the ID
-        Customer customer = new Customer(
+    public int Add(UserDTO userDTO) throws IOException {
+        User customer = new User(
                 0,  // Set 0 or leave blank, as the ID will be auto-generated
-                customerDTO.getCusName(),
-                customerDTO.getCusAddress(),
-                customerDTO.getCusNIC(),
-                customerDTO.getCusPhone1(),
-                customerDTO.getCusPhone2(),
-                customerDTO.getCusDOB(),
-                1,
-                new User(1,"a","a","a","a",1)
+                userDTO.getUserName(),
+                userDTO.getUserPassword(),
+                userDTO.getUserEmail(),
+                userDTO.getUserRole(),
+                1
         );
 
         Session session = FactoryConfiguration.getInstance().getSession();
@@ -37,11 +33,10 @@ public class CustomerSerivceImpl implements CustomerService {
         try {
             transaction = session.beginTransaction();
 
-            String query = "FROM Customer WHERE cusPhoneOne = :phoneOne OR cusPhoneTwo = :phoneTwo OR nic = :nic";
+            String query = "FROM User WHERE username = :username OR email = :email";
             Customer existingCustomer = session.createQuery(query, Customer.class)
-                    .setParameter("phoneOne", customer.getCusPhoneOne())
-                    .setParameter("phoneTwo", customer.getCusPhoneTwo())
-                    .setParameter("nic", customer.getNic())
+                    .setParameter("username", customer.getUsername())
+                    .setParameter("email", customer.getEmail())
                     .uniqueResult();
 
             if (existingCustomer == null) {
@@ -63,17 +58,15 @@ public class CustomerSerivceImpl implements CustomerService {
     }
 
     @Override
-    public void Edit(CustomerDTO customerDTO, int currentSelectedId) throws IOException {
+    public void Edit(UserDTO userDTO, int currentSelectedId) throws IOException {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        Customer customer = session.get(Customer.class, currentSelectedId);
-        customer.setCusName(customerDTO.getCusName());
-        customer.setCusAddress(customerDTO.getCusAddress());
-        customer.setNic(customerDTO.getCusNIC());
-        customer.setCusPhoneOne(customerDTO.getCusPhone1());
-        customer.setCusPhoneTwo(customerDTO.getCusPhone2());
-        customer.setDob(customerDTO.getCusDOB());
-        session.update(customer);
+        User user = session.get(User.class, currentSelectedId);
+        user.setUsername(userDTO.getUserName());
+        user.setPassword(userDTO.getUserPassword());
+        user.setEmail(userDTO.getUserEmail());
+        user.setRole(userDTO.getUserRole());
+        session.update(user);
         transaction.commit();
         session.close();
     }
@@ -82,20 +75,20 @@ public class CustomerSerivceImpl implements CustomerService {
     public void Delete(int currentSelectedId) throws IOException {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        session.createNativeQuery("UPDATE customer SET status = 0 WHERE cusId = " + currentSelectedId).executeUpdate();
+        session.createNativeQuery("UPDATE user SET status = 0 WHERE userId = " + currentSelectedId).executeUpdate();
         transaction.commit();
         session.close();
     }
 
     @Override
-    public List<Customer> getAllCustomers() throws IOException {
+    public List<User> getAllUser() throws IOException {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = session.beginTransaction();
-        NativeQuery nativeQuery = session.createNativeQuery("SELECT * FROM customer");
-        nativeQuery.addEntity(Customer.class);
-        List<Customer> itemList = nativeQuery.getResultList();
+        NativeQuery nativeQuery = session.createNativeQuery("SELECT * FROM user");
+        nativeQuery.addEntity(User.class);
+        List<User> userList = nativeQuery.getResultList();
         transaction.commit();
         session.close();
-        return itemList;
+        return userList;
     }
 }

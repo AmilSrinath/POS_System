@@ -11,25 +11,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cusId;
-    private String cusName;
-    private String cusAddress;
+    private int userId;
     @Column(unique = true)
-    private String nic;
+    private String username;
+    private String password;
     @Column(unique = true)
-    private String cusPhoneOne;
-    @Column(unique = true)
-    private String cusPhoneTwo;
-    private String dob;
+    private String email;
+    private String role;
     private int status;
-
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
 }
+
