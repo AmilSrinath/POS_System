@@ -7,6 +7,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import pos.system.project.controller.HomeController;
+import pos.system.project.controller.UserController;
+import pos.system.project.entity.User;
 import pos.system.project.util.FactoryConfiguration;
 
 import java.io.IOException;
@@ -27,9 +30,8 @@ public class Main extends Application {
         transaction.commit();
         session.close();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/home.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
         Parent root = loader.load();
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);

@@ -3,11 +3,14 @@ package pos.system.project.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import pos.system.project.entity.User;
+import pos.system.project.service.UserService;
+import pos.system.project.service.impl.UserServiceImpl;
 
 import java.io.IOException;
 
@@ -15,11 +18,16 @@ import java.io.IOException;
  * @author Amil Srinath
  */
 public class HomeController {
+    public static User user;
+
     @FXML
     public AnchorPane home;
 
     @FXML
     public Button btnCategory;
+
+    @FXML
+    public Label lblUsername;
 
     @FXML
     private Button btnConfiguration;
@@ -55,6 +63,7 @@ public class HomeController {
     private Button btnUsers;
 
     private final Stage stage = new Stage();
+    UserService userService = new UserServiceImpl();
 
     @FXML
     void btnConfigurationOnAction(ActionEvent event) throws IOException {
@@ -180,5 +189,10 @@ public class HomeController {
         stage.setResizable(false);
         stage.show();
         home.getScene().getWindow().hide();
+    }
+
+    public void setUserID(String username) throws IOException {
+        user = userService.getUserByUsername(username);
+        lblUsername.setText(user.getUsername());
     }
 }

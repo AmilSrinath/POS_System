@@ -60,6 +60,16 @@
                   <Font name="Poppins Regular" size="29.0" />
                </font>
             </Label>
+            <Label layoutX="603.0" layoutY="35.0" text="User :" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="22.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblUsername" layoutX="677.0" layoutY="35.0" textFill="WHITE">
+               <font>
+                  <Font name="Poppins Regular" size="22.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
       <Button fx:id="btnCustomers" contentDisplay="TOP" layoutX="1074.0" layoutY="186.0" mnemonicParsing="false" onAction="#btnCustomersOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Customers" textFill="WHITE">

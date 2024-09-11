@@ -14,4 +14,5 @@ public interface UserService {
     void Edit(UserDTO userDTO, int currentSelectedId) throws IOException;
     void Delete(int currentSelectedId) throws IOException;
     List<User> getAllUser() throws IOException;
+    User getUserByUsername(String username) throws IOException;
 }

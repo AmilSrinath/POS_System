@@ -91,4 +91,31 @@ public class UserServiceImpl implements UserService {
         session.close();
         return userList;
     }
+
+    @Override
+    public User getUserByUsername(String username) throws IOException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = null;
+        User user = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // Use HQL (Hibernate Query Language) to fetch the user by username
+            String hql = "FROM User WHERE username = :username AND status = 1";
+            user = session.createQuery(hql, User.class)
+                    .setParameter("username", username)
+                    .uniqueResult();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return user;
+    }
 }

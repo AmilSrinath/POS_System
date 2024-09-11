@@ -3,6 +3,7 @@ package pos.system.project.service.impl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
+import pos.system.project.controller.HomeController;
 import pos.system.project.dto.CustomerDTO;
 import pos.system.project.entity.Customer;
 import pos.system.project.entity.User;
@@ -28,7 +29,7 @@ public class CustomerSerivceImpl implements CustomerService {
                 customerDTO.getCusPhone2(),
                 customerDTO.getCusDOB(),
                 1,
-                new User(1,"a","a","a","a",1)
+                HomeController.user
         );
 
         Session session = FactoryConfiguration.getInstance().getSession();
