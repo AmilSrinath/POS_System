@@ -122,4 +122,7 @@ public class OrderController {
         alert.showAndWait();
     }
 
+    public void setData() {
+        itemBarcode.requestFocus();
+    }
 }

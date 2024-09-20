@@ -1,20 +1,31 @@
 package pos.system.project.controller;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pos.system.project.entity.Badge;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static pos.system.project.controller.OrderController.badgeList;
 
 /**
  * @author Amil Srinath
  */
 public class PopupController {
+    @FXML
+    public ScrollPane badgeScrollPane;
+    private int selectedIndex = -1; // To keep track of the currently selected card
+    private List<AnchorPane> cardList; // To store the created cards (badges)
 
     public VBox badgeContainer;
     public int itemId = -1;
@@ -27,97 +38,124 @@ public class PopupController {
     }
 
     public void loadBadges(List<Badge> badgeList, Stage popupStage) {
-        // Filter the badge list to get only active badges for the selected item
+        cardList = new ArrayList<>();
+        badgeContainer.getChildren().clear();
+
         List<Badge> filteredBadges = badgeList.stream()
                 .filter(badge -> badge.getStatus() == 1 && badge.getItem().getItemId() == itemId)
+                .sorted((b1, b2) -> b1.getExpireDate().compareTo(b2.getExpireDate()))
                 .toList();
 
-        // If there is only one badge, automatically select it and show quantity input
-        if (filteredBadges.size() == 1) {
-            Badge badge = filteredBadges.get(0);
-            // Set the badge ID to itemBarcode in the OrderController
-            orderController.itemBarcode.setText(String.valueOf(badge.getBadgeId()));
+        for (Badge badge : filteredBadges) {
+            AnchorPane badgeCard = createBadgeCard(badge, popupStage, orderController);
+            cardList.add(badgeCard); // Add the card to the list
+            badgeContainer.getChildren().add(badgeCard); // Display the card
+        }
 
-            // Automatically prompt the user for quantity input
-            showQuantityInputDialog(badge, popupStage);
+        // Auto-select the first card if there are any badges
+        if (!cardList.isEmpty()) {
+            selectedIndex = 0;
+            highlightSelectedCard(); // Highlight the first card
+        }
 
-            // Close the popup stage after handling the input
-            popupStage.close();
-        } else {
-            // If multiple badges, load them into the popup and display them
-            setTableData(filteredBadges, popupStage, orderController);
-            popupStage.show(); // Show the popup with badges
+        // Add key listener to handle arrow keys and Enter key
+        popupStage.getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.DOWN) {
+                navigateCards(1); // Move selection down
+            } else if (event.getCode() == KeyCode.UP) {
+                navigateCards(-1); // Move selection up
+            } else if (event.getCode() == KeyCode.ENTER && selectedIndex >= 0) {
+                selectBadge(cardList.get(selectedIndex), popupStage); // Select the current card
+            }
+        });
+
+        popupStage.show(); // Show the popup with badges
+    }
+
+    private void highlightSelectedCard() {
+        if (selectedIndex >= 0 && selectedIndex < cardList.size()) {
+            // Deselect the current card (if any)
+            if (selectedIndex >= 0) {
+                cardList.get(selectedIndex).setStyle("-fx-background-color: #e0e0e0; -fx-padding: 10; -fx-border-color: #aaa;");
+            }
         }
     }
 
-    public void showQuantityInputDialog(Badge badge, Stage popupStage) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Enter Quantity");
-        dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId());
-        dialog.setContentText("Quantity:");
+    private void navigateCards(int direction) {
+        // Deselect the current card (if any)
+        if (selectedIndex >= 0) {
+            cardList.get(selectedIndex).setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-color: #ccc;");
+        }
 
-        Optional<String> result = dialog.showAndWait();
+        // Update the index based on the direction (1 for down, -1 for up)
+        selectedIndex += direction;
 
-        result.ifPresent(quantity -> {
-            try {
-                int qty = Integer.parseInt(quantity);
-                if (qty > badge.getQuantity()) {
-                    showErrorDialog("Invalid Quantity", "Entered quantity exceeds available stock.");
-                } else if (qty <= 0) {
-                    showErrorDialog("Invalid Quantity", "Quantity must be greater than zero.");
-                } else {
-                    // Handle the case where the quantity is valid
-                    // You could store this quantity in the OrderController or proceed with the order processing
-                    orderController.itemBarcode.setText(String.valueOf(badge.getBadgeId()));
+        // Ensure the index stays within the bounds of the card list
+        if (selectedIndex < 0) {
+            selectedIndex = cardList.size() - 1; // Wrap around to the last card
+        } else if (selectedIndex >= cardList.size()) {
+            selectedIndex = 0; // Wrap around to the first card
+        }
 
-                    // Close the popup stage if it's open
-                    if (popupStage != null) {
-                        popupStage.close();
-                    }
-                }
-            } catch (NumberFormatException e) {
-                showErrorDialog("Invalid Input", "Please enter a valid number for quantity.");
-            }
-        });
+        // Highlight the new selected card
+        cardList.get(selectedIndex).setStyle("-fx-background-color: #e0e0e0; -fx-padding: 10; -fx-border-color: #aaa;");
+
+        // Adjust the ScrollPane to ensure the selected card is visible
+        scrollToSelectedCard();
     }
 
-    public void setTableData(List<Badge> badges, Stage popupStage, OrderController orderController) {
-        badgeContainer.getChildren().clear();
-        for (Badge badge : badges) {
-            if (badge.getStatus() == 1 && badge.getItem().getItemId() == itemId) {
-                AnchorPane badgeCard = createBadgeCard(badge, popupStage, orderController);
-                badgeContainer.getChildren().add(badgeCard);
-            }
+    private void scrollToSelectedCard() {
+        if (selectedIndex >= 0 && selectedIndex < cardList.size()) {
+            AnchorPane selectedCard = cardList.get(selectedIndex);
+            double totalHeight = badgeContainer.getHeight()-120; // Total height of the VBox
+            double selectedCardY = selectedCard.getBoundsInParent().getMinY(); // Y position of the selected card
+
+            // Calculate the percentage position of the selected card in the ScrollPane
+            double scrollPosition = selectedCardY / totalHeight;
+
+            // Ensure the ScrollPane scrolls to show the selected card
+            badgeScrollPane.setVvalue(scrollPosition);
+        }
+    }
+
+    private void selectBadge(AnchorPane selectedCard, Stage popupStage) {
+        // Assuming the card has a badge associated with it, we can retrieve it based on the UI structure
+        Label badgeIdLabel = (Label) selectedCard.getChildren().get(0); // Assuming the first child is the badge ID label
+        String badgeIdText = badgeIdLabel.getText().replace("Badge ID: ", "");
+        int badgeId = Integer.parseInt(badgeIdText);
+
+        // Find the badge by its ID
+        Badge selectedBadge = badgeList.stream()
+                .filter(badge -> badge.getBadgeId() == badgeId)
+                .findFirst()
+                .orElse(null);
+
+        if (selectedBadge != null) {
+            showQuantityInputDialog(selectedBadge, popupStage);
         }
     }
 
     private AnchorPane createBadgeCard(Badge badge, Stage popupStage, OrderController orderController) {
-        // Create an AnchorPane to represent the card
         AnchorPane card = new AnchorPane();
         card.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-color: #ccc;");
         card.setPrefSize(600, 100);
 
-        // Badge ID Label
         Label badgeIdLabel = new Label("Badge ID: " + badge.getBadgeId());
         badgeIdLabel.setLayoutX(20);
         badgeIdLabel.setLayoutY(20);
 
-        // Status Label
         Label badgeStatusLabel = new Label("Status: " + (badge.getStatus() == 1 ? "Active" : "Inactive"));
         badgeStatusLabel.setLayoutX(20);
         badgeStatusLabel.setLayoutY(50);
 
-        // Quantity Label
         Label quantityLabel = new Label("Quantity: " + badge.getQuantity());
         quantityLabel.setLayoutX(20);
         quantityLabel.setLayoutY(80);
 
-        // Selling Price Label
         Label priceLabel = new Label("Selling Price: " + badge.getSellingPrice());
         priceLabel.setLayoutX(300);
         priceLabel.setLayoutY(20);
 
-        // Expiration Date Label
         Label expiryDateLabel = new Label("Expiry Date: " + badge.getExpireDate().toString());
         expiryDateLabel.setLayoutX(300);
         expiryDateLabel.setLayoutY(50);
@@ -127,19 +165,14 @@ public class PopupController {
             card.setStyle("-fx-background-color: #e0e0e0; -fx-padding: 10; -fx-border-color: #aaa;");
         });
         card.setOnMouseExited(event -> {
-            card.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-color: #ccc;");
+            if (cardList.indexOf(card) != selectedIndex) { // Only change if not the currently selected card
+                card.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-color: #ccc;");
+            }
         });
 
-        // Add click event to the card to hide window and set the badge ID for itemBarcode
-        card.setOnMouseClicked(event -> {
-            // Set the badge ID to itemBarcode in the OrderController
-            orderController.itemBarcode.setText(String.valueOf(badge.getBadgeId()));
+        // Add click event to the card to select the badge
+        card.setOnMouseClicked(event -> selectBadge(card, popupStage));
 
-            // Show a popup to enter quantity (same logic as in loadBadges)
-            showQuantityInputDialog(badge, popupStage);
-        });
-
-        // Add components to the card
         card.getChildren().addAll(badgeIdLabel, badgeStatusLabel, quantityLabel, priceLabel, expiryDateLabel);
 
         return card;
@@ -151,6 +184,33 @@ public class PopupController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void showQuantityInputDialog(Badge badge, Stage popupStage) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Enter Quantity");
+        dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId()+"\nAvailable Stock: " + badge.getQuantity());
+        dialog.setContentText("Quantity:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(quantity -> {
+            try {
+                int qty = Integer.parseInt(quantity);
+                if (qty > badge.getQuantity()) {
+                    showErrorDialog("Invalid Quantity", "Entered quantity exceeds available stock.");
+                } else if (qty <= 0) {
+                    showErrorDialog("Invalid Quantity", "Quantity must be greater than zero.");
+                } else {
+                    orderController.itemBarcode.setText(String.valueOf(qty));
+                    // Close the popup stage only if it exists
+                    if (popupStage != null) {
+                        popupStage.close();
+                    }
+                }
+            } catch (NumberFormatException e) {
+                showErrorDialog("Invalid Input", "Please enter a valid number for quantity.");
+            }
+        });
     }
 
 }

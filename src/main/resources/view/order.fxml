@@ -15,6 +15,11 @@
 
 <AnchorPane prefHeight="1024.0" prefWidth="1680.0" style="-fx-background-color: #dee2e6;" styleClass="root" stylesheets="@../Styles/CSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.OrderController">
    <children>
+      <TextField fx:id="itemBarcode" layoutX="260.0" layoutY="192.0" onAction="#itemBarcodeOnAction" prefHeight="33.0" prefWidth="773.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </TextField>
       <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
          <children>
             <Label layoutX="1171.0" layoutY="35.0" text="Date" textFill="WHITE">
@@ -62,11 +67,6 @@
           <TableColumn prefWidth="75.0" text="C2" />
         </columns>
       </TableView>
-      <TextField fx:id="itemBarcode" layoutX="260.0" layoutY="192.0" onAction="#itemBarcodeOnAction" prefHeight="33.0" prefWidth="773.0">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </TextField>
       <Text layoutX="72.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
          <font>
             <Font name="Poppins Regular" size="17.0" />

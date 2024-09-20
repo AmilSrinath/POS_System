@@ -130,6 +130,10 @@ public class HomeController {
     void btnOrdersOnAction(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/order.fxml"));
         AnchorPane anchorPane = loader.load();
+
+        OrderController orderController = loader.getController();
+        orderController.setData();
+
         Scene scene = new Scene(anchorPane);
         stage.setScene(scene);
         stage.setResizable(false);
