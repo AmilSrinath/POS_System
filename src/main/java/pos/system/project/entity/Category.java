@@ -12,23 +12,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "item")
-public class Item {
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int itemId;
+    private int categoryId;
     @Column(unique = true)
-    private String itemBarcode;
-    private String itemName;
-    private int sellByStatus; // 1 = unit, 2 = fraction
-    private int status; // 1 = active, 0 = inactive
-    @Lob
-    @Column(columnDefinition = "LONGTEXT")
-    private String imageUrl;
-
-    @ManyToOne
-    @JoinColumn(name = "categoryId")
-    private Category category;
+    private String name;
+    private int status;
 
     @ManyToOne
     @JoinColumn(name = "userId")

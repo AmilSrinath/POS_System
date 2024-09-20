@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="532.0" prefWidth="792.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.PopupController">
+    <children>
+        <ScrollPane layoutX="20.0" layoutY="200.0" prefHeight="313.0" prefWidth="753.0">
+            <content>
+                <VBox fx:id="badgeContainer" spacing="10">
+                    <!-- Cards will be added here dynamically -->
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

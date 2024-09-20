@@ -118,4 +118,37 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public boolean checkCredentials(String username, String password) throws IOException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = null;
+        boolean isValid = false;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // HQL query to check for the username and password
+            String hql = "FROM User WHERE username = :username AND password = :password AND status = 1";
+            User user = session.createQuery(hql, User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
+                    .uniqueResult();
+
+            if (user != null) {
+                isValid = true; // User with valid credentials found
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return isValid;
+    }
 }

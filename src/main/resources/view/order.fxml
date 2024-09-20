@@ -3,12 +3,17 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1024.0" prefWidth="1680.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.OrderController" styleClass="root" stylesheets="@../Styles/CSS.css">
+<AnchorPane prefHeight="1024.0" prefWidth="1680.0" style="-fx-background-color: #dee2e6;" styleClass="root" stylesheets="@../Styles/CSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.OrderController">
    <children>
       <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
          <children>
@@ -51,10 +56,27 @@
             </Button>
          </children>
       </AnchorPane>
-      <Label layoutX="792.0" layoutY="491.0" text="Orders">
+      <TableView layoutX="72.0" layoutY="260.0" prefHeight="675.0" prefWidth="960.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="C1" />
+          <TableColumn prefWidth="75.0" text="C2" />
+        </columns>
+      </TableView>
+      <TextField fx:id="itemBarcode" layoutX="260.0" layoutY="192.0" onAction="#itemBarcodeOnAction" prefHeight="33.0" prefWidth="773.0">
          <font>
-            <Font name="Poppins Regular" size="29.0" />
+            <Font size="17.0" />
          </font>
-      </Label>
+      </TextField>
+      <Text layoutX="72.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Text>
+      <Line endX="-100.0" endY="774.0" layoutX="1243.0" layoutY="173.0" startX="-100.0" />
+      <Button layoutX="1504.0" layoutY="904.0" mnemonicParsing="false" onAction="#PlaceOrderOnAction" prefHeight="42.0" prefWidth="137.0" style="-fx-background-color: #38b000;" text="Place Order">
+         <font>
+            <Font name="Poppins Regular" size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

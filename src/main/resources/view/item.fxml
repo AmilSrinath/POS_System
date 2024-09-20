@@ -108,14 +108,14 @@
             <Font name="Poppins Regular" size="18.0" />
          </font>
       </Button>
-      <TableView fx:id="tblCustomer" layoutX="127.0" layoutY="500.0" onMouseClicked="#tableOnMouseClicked" prefHeight="471.0" prefWidth="1442.0" style="-fx-font-size: 16;">
+      <TableView fx:id="tblItem" layoutX="127.0" layoutY="544.0" prefHeight="427.0" prefWidth="830.0" style="-fx-font-size: 16;">
          <columns>
-            <TableColumn fx:id="colCusName" prefWidth="227.0" text="Customer Name" />
-            <TableColumn fx:id="colCusAddress" prefWidth="321.0" text="Customer Address" />
-            <TableColumn fx:id="colCusNIC" prefWidth="217.0" text="NIC" />
-            <TableColumn fx:id="colCusPhone1" prefWidth="222.0" text="Phone 1" />
-            <TableColumn fx:id="colCusPhone2" prefWidth="227.0" text="Phone 2" />
-            <TableColumn fx:id="colCusDOB" prefWidth="226.0" text="Date Of Birth" />
+            <TableColumn fx:id="colItemImage" prefWidth="81.0" text="Image" />
+            <TableColumn fx:id="colTableItemID" prefWidth="95.0" text="Item ID" />
+            <TableColumn fx:id="colItemName" prefWidth="227.0" text="Item Name" />
+            <TableColumn fx:id="colItemBarcode" prefWidth="184.0" text="Item Barcode" />
+            <TableColumn fx:id="colItemCategory" prefWidth="137.0" text="Category" />
+            <TableColumn fx:id="colItemSellBy" prefWidth="104.0" text="Sell By" />
          </columns>
       </TableView>
       <Text fx:id="lblQuantity" layoutX="177.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity">
@@ -128,7 +128,7 @@
             <Font name="Poppins Regular" size="18.0" />
          </font>
       </Button>
-      <DatePicker fx:id="itemExpiteDate" layoutX="834.0" layoutY="234.0" prefHeight="32.0" prefWidth="271.0" style="-fx-font-size: 17;" />
+      <DatePicker fx:id="itemExpireDate" layoutX="834.0" layoutY="234.0" prefHeight="32.0" prefWidth="271.0" style="-fx-font-size: 17;" />
       <Text layoutX="657.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Stock Expire Date">
          <font>
             <Font name="Poppins Regular" size="17.0" />
@@ -150,7 +150,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <ComboBox fx:id="cmbCategory" layoutX="835.0" layoutY="285.0" prefHeight="33.0" prefWidth="231.0" style="-fx-font-size: 17;" />
+      <ComboBox fx:id="cmbCategory" layoutX="835.0" layoutY="285.0" onMouseClicked="#cmbCategoryOnMouseClicked" prefHeight="33.0" prefWidth="231.0" style="-fx-font-size: 17;" visibleRowCount="4" />
       <Text layoutX="657.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
          <font>
             <Font name="Poppins Regular" size="17.0" />
@@ -161,9 +161,42 @@
             <Font size="17.0" />
          </font>
       </TextField>
-      <ImageView fitHeight="33.0" fitWidth="34.0" layoutX="1072.0" layoutY="287.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="33.0" fitWidth="34.0" layoutX="1072.0" layoutY="287.0" onMouseClicked="#addCategoryOnMouseClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assest/icon/icons8-plus-240.png" />
+         </image>
+      </ImageView>
+      <Text layoutX="657.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image">
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Text>
+      <TableView fx:id="tblBadge" layoutX="970.0" layoutY="544.0" onMouseClicked="#tableOnMouseClicked" prefHeight="427.0" prefWidth="568.0" style="-fx-font-size: 16;">
+         <columns>
+            <TableColumn fx:id="colItemID" prefWidth="114.0" text="Item ID" />
+            <TableColumn fx:id="colItemQty" prefWidth="110.0" text="Quantity" />
+            <TableColumn fx:id="colItemPurchasePrice" prefWidth="119.0" text="Purchase Price" />
+            <TableColumn fx:id="colItemSellingPrice" prefWidth="110.0" text="Selling Price" />
+            <TableColumn fx:id="colItemExpireDate" prefWidth="114.0" text="Expire Date" />
+         </columns>
+      </TableView>
+      <Text layoutX="521.0" layoutY="530.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Details">
+         <font>
+            <Font name="Poppins Bold" size="17.0" />
+         </font>
+      </Text>
+      <Text layoutX="1194.0" layoutY="530.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Badge Details">
+         <font>
+            <Font name="Poppins Bold" size="17.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="imageView" fitHeight="117.0" fitWidth="129.0" layoutX="834.0" layoutY="356.0" onMouseClicked="#addImageOnMouseClicked" onMouseEntered="#imageViewOnMouseEntered" onMouseExited="#imageViewOnMouseExited" pickOnBounds="true" preserveRatio="true" styleClass="home-top-bar">
+         <image>
+            <Image url="@../assest/icon/icons8-image-upload-100.png" />
+         </image></ImageView>
+      <ImageView fx:id="iconEdit" fitHeight="42.0" fitWidth="44.0" layoutX="872.0" layoutY="386.0" onMouseClicked="#addImageOnMouseClicked" onMouseEntered="#imageViewOnMouseEntered" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../assest/icon/icons8-edit-100.png" />
          </image>
       </ImageView>
    </children>
