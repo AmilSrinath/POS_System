@@ -61,10 +61,14 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView layoutX="72.0" layoutY="260.0" prefHeight="675.0" prefWidth="960.0">
+      <TableView fx:id="tblOrder" layoutX="72.0" layoutY="260.0" prefHeight="536.0" prefWidth="960.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+          <TableColumn fx:id="colItemName" prefWidth="222.0" text="Item Name" />
+          <TableColumn fx:id="colBarcode" prefWidth="177.0" text="Barcode" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="143.0" text="Unit Price" />
+            <TableColumn fx:id="colQuantity" prefWidth="123.0" text="Quantity" />
+            <TableColumn fx:id="colSubTotal" prefWidth="150.0" text="SubTotal" />
+            <TableColumn fx:id="colAction" prefWidth="144.0" text="Action" />
         </columns>
       </TableView>
       <Text layoutX="72.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
@@ -78,5 +82,15 @@
             <Font name="Poppins Regular" size="18.0" />
          </font>
       </Button>
+      <Label layoutX="1504.0" layoutY="792.0" text="Total :">
+         <font>
+            <Font name="Poppins Regular" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblTotal" layoutX="1582.0" layoutY="792.0" text="0.00">
+         <font>
+            <Font name="Poppins Regular" size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

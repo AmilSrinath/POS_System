@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import pos.system.project.entity.Badge;
+import pos.system.project.entity.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,6 @@ public class PopupController {
 
     private void highlightSelectedCard() {
         if (selectedIndex >= 0 && selectedIndex < cardList.size()) {
-            // Deselect the current card (if any)
             if (selectedIndex >= 0) {
                 cardList.get(selectedIndex).setStyle("-fx-background-color: #e0e0e0; -fx-padding: 10; -fx-border-color: #aaa;");
             }
@@ -188,26 +188,41 @@ public class PopupController {
 
     public void showQuantityInputDialog(Badge badge, Stage popupStage) {
         TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Enter Quantity");
-        dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId()+"\nAvailable Stock: " + badge.getQuantity());
-        dialog.setContentText("Quantity:");
+        for (Item item : orderController.itemList) {
+            if (item.getItemId() == badge.getItem().getItemId()) {
+                if (item.getSellByStatus() == 1){
+                    dialog.setTitle("Enter Quantity");
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId()+"\nAvailable Stock: " + badge.getQuantity());
+                    dialog.setContentText("Quantity:");
+                }else {
+                    dialog.setTitle("Enter Quantity");
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId()+"\nAvailable Stock: " + badge.getQuantity()*1000+"g");
+                    dialog.setContentText("Quantity:");
+                }
+            }
+        }
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(quantity -> {
             try {
                 int qty = Integer.parseInt(quantity);
                 if (qty > badge.getQuantity()) {
+                    orderController.quantity = -1;
                     showErrorDialog("Invalid Quantity", "Entered quantity exceeds available stock.");
                 } else if (qty <= 0) {
+                    orderController.quantity = -1;
                     showErrorDialog("Invalid Quantity", "Quantity must be greater than zero.");
                 } else {
-                    orderController.itemBarcode.setText(String.valueOf(qty));
+//                    orderController.itemBarcode.setText(String.valueOf(qty));
+                    orderController.quantity = qty;
+                    orderController.badge=badge;
                     // Close the popup stage only if it exists
                     if (popupStage != null) {
                         popupStage.close();
                     }
                 }
             } catch (NumberFormatException e) {
+                orderController.quantity = -1;
                 showErrorDialog("Invalid Input", "Please enter a valid number for quantity.");
             }
         });
