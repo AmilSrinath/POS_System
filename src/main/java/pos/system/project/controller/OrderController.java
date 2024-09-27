@@ -3,6 +3,7 @@ package pos.system.project.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -21,6 +22,7 @@ import pos.system.project.service.impl.BadgeServiceImpl;
 import pos.system.project.service.impl.ItemServiceImpl;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -28,6 +30,7 @@ import java.util.List;
  */
 public class OrderController {
     public TableView<OrderTM> tblOrder;
+    public boolean isTrue = true;
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
 
@@ -53,7 +56,9 @@ public class OrderController {
     @FXML
     public Label lblTotal;
 
-    public double quantity = 0;
+    private ContextMenu suggestionMenu;
+
+    public BigDecimal quantity = BigDecimal.valueOf(0);
     public Badge badge;
 
     public void initialize() throws IOException {
@@ -66,6 +71,52 @@ public class OrderController {
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colSubTotal.setCellValueFactory(new PropertyValueFactory<>("subTotal"));
         colAction.setCellFactory(getDeleteButtonCellFactory());
+
+        setupAutoSuggestion();
+
+        for (Badge badge : badgeList) {
+            System.out.println(badge.getQuantity());
+        }
+        System.out.println("-------------------------------");
+    }
+
+    private void setupAutoSuggestion() {
+        suggestionMenu = new ContextMenu();
+        itemBarcode.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.isEmpty()) {
+                suggestionMenu.hide();
+            } else {
+                List<MenuItem> suggestions = getSuggestions(newValue);
+                if (!suggestions.isEmpty()) {
+                    suggestionMenu.getItems().setAll(suggestions);
+                    if (!suggestionMenu.isShowing()) {
+                        suggestionMenu.show(itemBarcode, Side.BOTTOM, 0, 0);
+                    }
+                } else {
+                    suggestionMenu.hide();
+                }
+            }
+        });
+
+        itemBarcode.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                suggestionMenu.hide();
+            }
+        });
+    }
+
+    private List<MenuItem> getSuggestions(String query) {
+        List<MenuItem> suggestions = itemList.stream()
+                .filter(item -> item.getItemName().toLowerCase().contains(query.toLowerCase()))
+                .map(item -> {
+                    MenuItem suggestion = new MenuItem(item.getItemName());
+                    suggestion.setOnAction(e -> {
+                        itemBarcode.setText(item.getItemBarcode()); // Set barcode when name is selected
+                        suggestionMenu.hide();
+                    });
+                    return suggestion;
+                }).toList();
+        return suggestions;
     }
 
     @FXML
@@ -90,7 +141,7 @@ public class OrderController {
     }
 
     @FXML
-    public void itemBarcodeOnAction(ActionEvent actionEvent) {
+    public void itemBarcodeOnAction(ActionEvent actionEvent) throws IOException {
         boolean itemFound = false;
         for (Item item : itemList) {
             if (item.getItemBarcode().equals(itemBarcode.getText())) {
@@ -127,48 +178,104 @@ public class OrderController {
                     } catch (IOException e) {
                         e.printStackTrace();
                         showErrorDialog("Error", "Failed to load the popup. Please try again.");
+                        itemBarcode.clear();
                     }
                 } else {
                     showErrorDialog("No Badges Found", "This item has no active badges.");
+                    itemBarcode.clear();
                 }
             }
         }
 
         if (!itemFound) {
             showErrorDialog("Invalid Barcode", "No item found for the entered barcode.");
+            itemBarcode.clear();
         }
     }
 
-    private void addRowTable(Badge badge, Item item) {
-        if (quantity == -1){
+    public void addRowTable(Badge badge, Item item) throws IOException {
+        if (quantity.compareTo(BigDecimal.valueOf(-1)) == 0 || !isTrue){
+
+
+            System.out.println("Fail");
+            System.out.println(quantity.compareTo(BigDecimal.valueOf(-1)));
+            System.out.println(isTrue);
             return;
         }
 
-        for (OrderTM orderTM : tblOrder.getItems()) {
-            if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
-                double qty = orderTM.getQuantity();
-                qty += quantity;
-                orderTM.setQuantity(qty);
-                orderTM.setSubTotal(badge.getSellingPrice()*qty);
-                tblOrder.refresh();
-                itemBarcode.clear();
-                setLblTotal();
-                return;
+        System.out.println("Pass");
+        if (item.getSellByStatus() == 1) {
+            for (OrderTM orderTM : tblOrder.getItems()) {
+                if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
+                    double qty = orderTM.getQuantity();
+                    BigDecimal qtyBigDecimal = BigDecimal.valueOf(qty);
+                    qtyBigDecimal = qtyBigDecimal.add(quantity);
+                    orderTM.setQuantity(qtyBigDecimal.doubleValue());
+                    orderTM.setBadgeId(badge.getBadgeId());
+                    orderTM.setSubTotal(badge.getSellingPrice()*qtyBigDecimal.doubleValue());
+                    tblOrder.refresh();
+                    itemBarcode.clear();
+                    setLblTotal();
+                    return;
+                }
             }
+
+            OrderTM orderTM = new OrderTM();
+            orderTM.setItemBarcode(item.getItemBarcode());
+            orderTM.setItemName(item.getItemName());
+            orderTM.setBadgeId(badge.getBadgeId());
+            orderTM.setQuantity(quantity.doubleValue());
+            orderTM.setUnitPrice(badge.getSellingPrice());
+            BigDecimal sellingPrice = BigDecimal.valueOf(badge.getSellingPrice());
+            BigDecimal subTotal = sellingPrice.multiply(quantity);
+            orderTM.setSubTotal(subTotal.doubleValue());
+            tblOrder.getItems().add(orderTM);
+            itemBarcode.clear();
+            setLblTotal();
+        }else {
+            for (OrderTM orderTM : tblOrder.getItems()) {
+                if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
+                    double currentQty = orderTM.getQuantity();
+                    BigDecimal currentQtyBigDecimal = BigDecimal.valueOf(currentQty);
+
+                    BigDecimal totalQuantity = currentQtyBigDecimal.add(quantity);
+                    BigDecimal quantity = totalQuantity.divide(BigDecimal.valueOf(1000));
+                    orderTM.setQuantity(totalQuantity.doubleValue());
+
+                    orderTM.setSubTotal(badge.getSellingPrice() * quantity.doubleValue());
+                    tblOrder.refresh();
+                    itemBarcode.clear();
+                    setLblTotal();
+
+                    setQuantity();
+                    for (Badge b : badgeList) {
+                        System.out.println(b.getQuantity());
+                    }
+                    System.out.println("-------------------------------");
+
+                    return;
+                }
+            }
+            OrderTM orderTM = new OrderTM();
+            orderTM.setItemBarcode(item.getItemBarcode());
+            orderTM.setItemName(item.getItemName());
+            orderTM.setQuantity(quantity.doubleValue());
+            orderTM.setUnitPrice(badge.getSellingPrice());
+            orderTM.setBadgeId(badge.getBadgeId());
+
+            //i want to divide the quantity by 1000
+            quantity = quantity.divide(BigDecimal.valueOf(1000));
+            orderTM.setSubTotal(badge.getSellingPrice()*quantity.doubleValue());
+
+            tblOrder.getItems().add(orderTM);
+            itemBarcode.clear();
+            setLblTotal();
         }
-
-        System.out.println(quantity);
-
-        OrderTM orderTM = new OrderTM();
-        orderTM.setItemBarcode(item.getItemBarcode());
-        orderTM.setItemName(item.getItemName());
-        orderTM.setQuantity(quantity);
-        orderTM.setUnitPrice(badge.getSellingPrice());
-        orderTM.setSubTotal(badge.getSellingPrice()*quantity);
-        tblOrder.getItems().add(orderTM);
-        itemBarcode.clear();
-        setLblTotal();
-        System.out.println(quantity);
+        setQuantity();
+        for (Badge b : badgeList) {
+            System.out.println(b.getQuantity());
+        }
+        System.out.println("-------------------------------");
     }
 
     public void setLblTotal() {
@@ -211,7 +318,19 @@ public class OrderController {
                         deleteButton.setOnAction((ActionEvent event) -> {
                             OrderTM selectedOrder = getTableView().getItems().get(getIndex());
                             tblOrder.getItems().remove(selectedOrder);
+                            restoreQuantity(selectedOrder);
+
                             setLblTotal();
+                            try {
+                                setQuantity(); // Update the badge quantities in the badgeList
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            for (Badge b : badgeList) {
+                                System.out.println(b.getQuantity());
+                            }
+                            System.out.println("-------------------------------");
                         });
                     }
 
@@ -231,4 +350,62 @@ public class OrderController {
             }
         };
     }
+
+    private void restoreQuantity(OrderTM orderTM) {
+        String barcode = orderTM.getItemBarcode();
+        BigDecimal removedQuantity = BigDecimal.valueOf(orderTM.getQuantity());
+
+        // Find the corresponding badge(s) in badgeList based on the item barcode
+        List<Badge> badges = badgeList.stream()
+                .filter(badge -> badge.getItem().getItemBarcode().equals(barcode))
+                .toList();
+
+        for (Badge badge : badges) {
+            // Add the removed quantity back to the available quantity
+            BigDecimal updatedQuantity = badge.getQuantity().add(removedQuantity);
+            badge.setQuantity(updatedQuantity);
+            System.out.println("Restored quantity for Badge ID " + badge.getBadgeId() + ": " + updatedQuantity);
+            break; // Since we only want to update one badge, break the loop
+        }
+    }
+
+    public void setQuantity() throws IOException {
+        // Reset badge quantities to original values by fetching from service
+        badgeList = badgeService.getAllBadges();
+
+        // Reduce the quantity based on the items currently in the tblOrder
+        for (OrderTM orderTM : tblOrder.getItems()) {
+            int orderBadgeId = orderTM.getBadgeId(); // Get badgeId from the order row
+            BigDecimal orderedQuantity = BigDecimal.valueOf(orderTM.getQuantity());
+
+            // Find the corresponding badge in badgeList based on the badgeId
+            Badge badge = badgeList.stream()
+                    .filter(b -> b.getBadgeId() == orderBadgeId)
+                    .findFirst()
+                    .orElse(null);
+
+            if (badge != null) {
+                BigDecimal availableQuantity = badge.getQuantity();
+
+                // Subtract the ordered quantity from the badge's available quantity
+                BigDecimal updatedQuantity = availableQuantity.subtract(orderedQuantity);
+
+                if (updatedQuantity.compareTo(BigDecimal.ZERO) < 0) {
+                    // If the resulting quantity is negative, handle the error appropriately
+                    showErrorDialog("Insufficient Stock",
+                            "Not enough stock for Badge ID: " + orderBadgeId + ". Available: " + availableQuantity);
+                    return; // Stop processing further if insufficient stock is found
+                } else {
+                    // Update the badge's quantity in the badgeList
+                    badge.setQuantity(updatedQuantity);
+                    System.out.println("Updated quantity for Badge ID " + badge.getBadgeId() + ": " + updatedQuantity);
+                }
+            } else {
+                // If no matching badge is found, show an error (optional)
+                showErrorDialog("Badge Not Found",
+                        "No badge found with ID: " + orderBadgeId);
+            }
+        }
+    }
+
 }

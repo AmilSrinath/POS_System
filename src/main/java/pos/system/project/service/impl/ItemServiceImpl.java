@@ -60,6 +60,7 @@ public class ItemServiceImpl implements ItemService {
             session.persist(item);
 
             // Create and persist the associated Badge
+            System.out.println("Service: "+badgeDTO.getQuantity());
             Badge badge = new Badge(
                     0,  // Assuming ID is auto-generated
                     badgeDTO.getPurchasePrice(),

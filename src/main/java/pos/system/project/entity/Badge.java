@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 /**
  * @author Amil Srinath
  */
@@ -19,7 +21,7 @@ public class Badge {
     private int badgeId;
     private double purchasePrice;
     private double sellingPrice;
-    private double quantity;
+    private BigDecimal quantity;
     private String expireDate;
     private int status;
 

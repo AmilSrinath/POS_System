@@ -31,6 +31,7 @@ import pos.system.project.service.impl.CategoryServiceImpl;
 import pos.system.project.service.impl.ItemServiceImpl;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.List;
@@ -180,12 +181,14 @@ public class ItemController {
                 // If the user selects "Yes", add the badge to the existing item
                 if (result.orElse(no) == yes) {
                     // Add badge to the existing item
+                    BigDecimal bigDecimal = new BigDecimal(itemQty.getText());
+                    BigDecimal qty = bigDecimal.multiply(BigDecimal.valueOf(1000));
                     badgeService.addBadge(
                             new Badge(
                                     0, // Assuming badgeId is auto-generated
                                     Double.parseDouble(itemPurchasePrice.getText()), // Purchase Price
                                     Double.parseDouble(itemSellingPrice.getText()), // Selling Price
-                                    Double.parseDouble(itemQty.getText()),          // Quantity
+                                    qty,          // Quantity
                                     itemExpireDate.getValue().toString(),           // Expiry Date
                                     1,                                              // Active status
                                     existingItem                                    // Associated item
@@ -203,6 +206,18 @@ public class ItemController {
         }
 
         // If the item doesn't already exist, add the new item
+        BigDecimal qty = new BigDecimal(itemQty.getText());
+
+        switch (cmbSellBy.getSelectionModel().getSelectedIndex()) {
+            case 0:
+                qty = qty;
+                break;
+            case 1:
+                qty = qty.multiply(BigDecimal.valueOf(1000));
+                break;
+            default:
+                break;
+        }
         itemService.addItem(
                 new ItemDTO(
                         itemName.getText(),
@@ -214,7 +229,7 @@ public class ItemController {
                 new BadgeDTO(
                         Double.parseDouble(itemPurchasePrice.getText()),
                         Double.parseDouble(itemSellingPrice.getText()),
-                        Double.parseDouble(itemQty.getText()),
+                        qty,
                         itemExpireDate.getValue().toString()
                 )
         );
@@ -255,10 +270,12 @@ public class ItemController {
                 base64Image
         );
 
+        BigDecimal qty = new BigDecimal(itemQty.getText());
+
         BadgeDTO badgeDTO = new BadgeDTO(
                 Double.parseDouble(itemPurchasePrice.getText()),
                 Double.parseDouble(itemSellingPrice.getText()),
-                Double.parseDouble(itemQty.getText()),
+                qty,
                 itemExpireDate.getValue().toString()
         );
 
@@ -284,7 +301,7 @@ public class ItemController {
             itemBarcode.setText(badge.getItem().getItemBarcode());
             itemPurchasePrice.setText(String.valueOf(badge.getPurchasePrice()));
             itemSellingPrice.setText(String.valueOf(badge.getSellingPrice()));
-            itemQty.setText(String.valueOf(badge.getQuantity()));
+            itemQty.setText(String.valueOf(badge.getQuantity().doubleValue()));
             itemExpireDate.setValue(LocalDate.parse(badge.getExpireDate()));
 
             for (Item i : itemList) {

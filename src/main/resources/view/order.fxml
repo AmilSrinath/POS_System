@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -61,7 +62,7 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tblOrder" layoutX="72.0" layoutY="260.0" prefHeight="536.0" prefWidth="960.0">
+      <TableView fx:id="tblOrder" layoutX="72.0" layoutY="260.0" prefHeight="498.0" prefWidth="960.0">
         <columns>
           <TableColumn fx:id="colItemName" prefWidth="222.0" text="Item Name" />
           <TableColumn fx:id="colBarcode" prefWidth="177.0" text="Barcode" />
@@ -82,14 +83,117 @@
             <Font name="Poppins Regular" size="18.0" />
          </font>
       </Button>
-      <Label layoutX="1504.0" layoutY="792.0" text="Total :">
+      <Label layoutX="1174.0" layoutY="792.0" text="Total :">
          <font>
             <Font name="Poppins Regular" size="24.0" />
          </font>
       </Label>
-      <Label fx:id="lblTotal" layoutX="1582.0" layoutY="792.0" text="0.00">
+      <Label fx:id="lblTotal" alignment="CENTER_RIGHT" layoutX="1324.0" layoutY="792.0" prefHeight="35.0" prefWidth="309.0" text="0.00">
          <font>
             <Font name="Poppins Regular" size="24.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="151.0" layoutX="72.0" layoutY="790.0" stroke="BLACK" strokeType="INSIDE" width="960.0" />
+      <Button contentDisplay="TOP" layoutX="111.0" layoutY="813.0" mnemonicParsing="false" prefHeight="107.0" prefWidth="91.0" styleClass="home-buttons" text="F1" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="225.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F2" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="336.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F3" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="450.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F4" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="563.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F5" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="677.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F6" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="788.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F7" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button contentDisplay="TOP" layoutX="902.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F8" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-dashboard-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Rectangle arcHeight="5.0" fill="#dee2e6" height="32.0" layoutX="86.0" layoutY="774.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="91.0" />
+      <Label layoutX="91.0" layoutY="778.0" text="Short Cut">
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
          </font>
       </Label>
    </children>

@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 import pos.system.project.entity.Badge;
 import pos.system.project.entity.Item;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +68,11 @@ public class PopupController {
             } else if (event.getCode() == KeyCode.UP) {
                 navigateCards(-1); // Move selection up
             } else if (event.getCode() == KeyCode.ENTER && selectedIndex >= 0) {
-                selectBadge(cardList.get(selectedIndex), popupStage); // Select the current card
+                try {
+                    selectBadge(cardList.get(selectedIndex), popupStage); // Select the current card
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -118,7 +124,7 @@ public class PopupController {
         }
     }
 
-    private void selectBadge(AnchorPane selectedCard, Stage popupStage) {
+    private void selectBadge(AnchorPane selectedCard, Stage popupStage) throws IOException {
         // Assuming the card has a badge associated with it, we can retrieve it based on the UI structure
         Label badgeIdLabel = (Label) selectedCard.getChildren().get(0); // Assuming the first child is the badge ID label
         String badgeIdText = badgeIdLabel.getText().replace("Badge ID: ", "");
@@ -132,6 +138,7 @@ public class PopupController {
 
         if (selectedBadge != null) {
             showQuantityInputDialog(selectedBadge, popupStage);
+            orderController.addRowTable(selectedBadge, selectedBadge.getItem());
         }
     }
 
@@ -171,7 +178,13 @@ public class PopupController {
         });
 
         // Add click event to the card to select the badge
-        card.setOnMouseClicked(event -> selectBadge(card, popupStage));
+        card.setOnMouseClicked(event -> {
+            try {
+                selectBadge(card, popupStage);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         card.getChildren().addAll(badgeIdLabel, badgeStatusLabel, quantityLabel, priceLabel, expiryDateLabel);
 
@@ -190,39 +203,53 @@ public class PopupController {
         TextInputDialog dialog = new TextInputDialog();
         for (Item item : orderController.itemList) {
             if (item.getItemId() == badge.getItem().getItemId()) {
-                if (item.getSellByStatus() == 1){
+                if (item.getSellByStatus() == 1) {
                     dialog.setTitle("Enter Quantity");
-                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId()+"\nAvailable Stock: " + badge.getQuantity());
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity());
                     dialog.setContentText("Quantity:");
-                }else {
+                } else {
                     dialog.setTitle("Enter Quantity");
-                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId()+"\nAvailable Stock: " + badge.getQuantity()*1000+"g");
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity() + "g");
                     dialog.setContentText("Quantity:");
                 }
             }
         }
 
+        // Show dialog and capture result
         Optional<String> result = dialog.showAndWait();
+
+        orderController.isTrue = true;
+
+        // If the dialog was cancelled, do nothing and return
+        if (!result.isPresent()) {
+            orderController.isTrue = false;
+            return;
+        }
+
         result.ifPresent(quantity -> {
+            orderController.isTrue = true;
             try {
-                int qty = Integer.parseInt(quantity);
-                if (qty > badge.getQuantity()) {
-                    orderController.quantity = -1;
+                BigDecimal qty = new BigDecimal(quantity);
+
+                // Check if the entered quantity exceeds available stock or if it is less than or equal to zero
+                if (qty.compareTo(badge.getQuantity()) > 0) {
+                    orderController.quantity = BigDecimal.valueOf(-1);
                     showErrorDialog("Invalid Quantity", "Entered quantity exceeds available stock.");
-                } else if (qty <= 0) {
-                    orderController.quantity = -1;
+                } else if (qty.compareTo(BigDecimal.ZERO) <= 0) {
+                    orderController.quantity = BigDecimal.valueOf(-1);
                     showErrorDialog("Invalid Quantity", "Quantity must be greater than zero.");
                 } else {
-//                    orderController.itemBarcode.setText(String.valueOf(qty));
-                    orderController.quantity = qty;
-                    orderController.badge=badge;
+                    // Valid quantity logic here
+                    orderController.quantity = qty; // Store the valid quantity
+                    orderController.badge = badge; // Associate the badge
+
                     // Close the popup stage only if it exists
                     if (popupStage != null) {
                         popupStage.close();
                     }
                 }
             } catch (NumberFormatException e) {
-                orderController.quantity = -1;
+                orderController.quantity = BigDecimal.valueOf(-1);
                 showErrorDialog("Invalid Input", "Please enter a valid number for quantity.");
             }
         });
