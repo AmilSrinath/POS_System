@@ -62,14 +62,14 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tblOrder" layoutX="72.0" layoutY="260.0" prefHeight="498.0" prefWidth="960.0">
+      <TableView fx:id="tblOrder" layoutX="72.0" layoutY="260.0" prefHeight="498.0" prefWidth="960.0" style="-fx-font-size: 16;">
         <columns>
-          <TableColumn fx:id="colItemName" prefWidth="222.0" text="Item Name" />
-          <TableColumn fx:id="colBarcode" prefWidth="177.0" text="Barcode" />
-            <TableColumn fx:id="colUnitPrice" prefWidth="143.0" text="Unit Price" />
-            <TableColumn fx:id="colQuantity" prefWidth="123.0" text="Quantity" />
-            <TableColumn fx:id="colSubTotal" prefWidth="150.0" text="SubTotal" />
-            <TableColumn fx:id="colAction" prefWidth="144.0" text="Action" />
+          <TableColumn fx:id="colItemName" prefWidth="249.0" text="Item Name" />
+          <TableColumn fx:id="colBarcode" prefWidth="219.0" text="Barcode" />
+            <TableColumn fx:id="colUnitPrice" prefWidth="133.0" text="Unit Price" />
+            <TableColumn fx:id="colQuantity" prefWidth="150.0" text="Quantity" />
+            <TableColumn fx:id="colSubTotal" prefWidth="146.0" text="SubTotal" />
+            <TableColumn fx:id="colAction" prefWidth="62.0" style="-fx-alignment: center;" text="Action" />
         </columns>
       </TableView>
       <Text layoutX="72.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
@@ -94,9 +94,9 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="151.0" layoutX="72.0" layoutY="790.0" stroke="BLACK" strokeType="INSIDE" width="960.0" />
-      <Button contentDisplay="TOP" layoutX="111.0" layoutY="813.0" mnemonicParsing="false" prefHeight="107.0" prefWidth="91.0" styleClass="home-buttons" text="F1" textFill="WHITE">
+      <Button fx:id="btnF1" contentDisplay="TOP" layoutX="111.0" layoutY="813.0" mnemonicParsing="false" onAction="#F1OnAction" prefHeight="107.0" prefWidth="91.0" styleClass="home-buttons" text="F1" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF1" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -106,9 +106,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="225.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F2" textFill="WHITE">
+      <Button fx:id="btnF2" contentDisplay="TOP" layoutX="225.0" layoutY="813.0" mnemonicParsing="false" onAction="#F2OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F2" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF2" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -118,9 +118,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="336.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F3" textFill="WHITE">
+      <Button fx:id="btnF3" contentDisplay="TOP" layoutX="336.0" layoutY="813.0" mnemonicParsing="false" onAction="#F3OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F3" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF3" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -130,9 +130,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="450.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F4" textFill="WHITE">
+      <Button fx:id="btnF4" contentDisplay="TOP" layoutX="450.0" layoutY="813.0" mnemonicParsing="false" onAction="#F4OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F4" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF4" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -142,9 +142,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="563.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F5" textFill="WHITE">
+      <Button fx:id="btnF5" contentDisplay="TOP" layoutX="563.0" layoutY="813.0" mnemonicParsing="false" onAction="#F5OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F5" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF5" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -154,9 +154,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="677.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F6" textFill="WHITE">
+      <Button fx:id="btnF6" contentDisplay="TOP" layoutX="677.0" layoutY="813.0" mnemonicParsing="false" onAction="#F6OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F6" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF6" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -166,9 +166,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="788.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F7" textFill="WHITE">
+      <Button fx:id="btnF7" contentDisplay="TOP" layoutX="788.0" layoutY="813.0" mnemonicParsing="false" onAction="#F7OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F7" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF7" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>
@@ -178,9 +178,9 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button contentDisplay="TOP" layoutX="902.0" layoutY="813.0" mnemonicParsing="false" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F8" textFill="WHITE">
+      <Button fx:id="btnF8" contentDisplay="TOP" layoutX="902.0" layoutY="813.0" mnemonicParsing="false" onAction="#F8OnAction" prefHeight="78.0" prefWidth="71.0" styleClass="home-buttons" text="F8" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="imgF8" fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-dashboard-100.png" />
                </image>

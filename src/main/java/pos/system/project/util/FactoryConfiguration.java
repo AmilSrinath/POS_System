@@ -23,6 +23,7 @@ public class FactoryConfiguration {
         configuration.addAnnotatedClass(User.class);
         configuration.addAnnotatedClass(Category.class);
         configuration.addAnnotatedClass(Badge.class);
+        configuration.addAnnotatedClass(ShortCut.class);
         sessionFactory = configuration.buildSessionFactory();
     }
 

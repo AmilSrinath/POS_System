@@ -1,5 +1,9 @@
 package pos.system.project.controller;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,20 +13,33 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import pos.system.project.entity.Badge;
 import pos.system.project.entity.Item;
+import pos.system.project.entity.ShortCut;
 import pos.system.project.entity.tm.OrderTM;
 import pos.system.project.service.BadgeService;
 import pos.system.project.service.ItemService;
+import pos.system.project.service.ShortCutService;
 import pos.system.project.service.impl.BadgeServiceImpl;
 import pos.system.project.service.impl.ItemServiceImpl;
+import pos.system.project.service.impl.ShortCutServiceImpl;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -31,8 +48,42 @@ import java.util.List;
 public class OrderController {
     public TableView<OrderTM> tblOrder;
     public boolean isTrue = true;
+    @FXML
+    public Button btnF1;
+    @FXML
+    public Button btnF2;
+    @FXML
+    public Button btnF3;
+    @FXML
+    public Button btnF4;
+    @FXML
+    public Button btnF5;
+    @FXML
+    public Button btnF6;
+    @FXML
+    public Button btnF7;
+    @FXML
+    public Button btnF8;
+    @FXML
+    public ImageView imgF1;
+    @FXML
+    public ImageView imgF2;
+    @FXML
+    public ImageView imgF3;
+    @FXML
+    public ImageView imgF4;
+    @FXML
+    public ImageView imgF5;
+    @FXML
+    public ImageView imgF6;
+    @FXML
+    public ImageView imgF7;
+    @FXML
+    public ImageView imgF8;
+
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
+    ShortCutService shortCutService = new ShortCutServiceImpl();
 
     public static List<Item> itemList;
     public static List<Badge> badgeList;
@@ -60,6 +111,7 @@ public class OrderController {
 
     public BigDecimal quantity = BigDecimal.valueOf(0);
     public Badge badge;
+    public static int shortCutID;
 
     public void initialize() throws IOException {
         itemList = itemService.getAllItems();
@@ -78,6 +130,100 @@ public class OrderController {
             System.out.println(badge.getQuantity());
         }
         System.out.println("-------------------------------");
+
+        shortCut();
+        setImageForShortCuts();
+    }
+
+    private void setImageForShortCuts() throws IOException {
+        List<ShortCut> shortCuts = shortCutService.getAllShortCuts();
+        ImageView[] imageViews = {imgF1, imgF2, imgF3, imgF4, imgF5, imgF6, imgF7, imgF8};
+
+        // Iterate through shortcuts and items to set images
+        for (int i = 0; i < shortCuts.size() && i < imageViews.length; i++) {
+            ShortCut shortCut = shortCuts.get(i);
+            String itemBarcode = shortCutService.getItemBarCodeById(shortCut.getShortcutId());
+
+            // Find the corresponding item in the itemList
+            for (Item item : itemList) {
+                if (item.getItemBarcode().equals(itemBarcode)) {
+                    String base64Image = item.getImageUrl(); // Assuming getImageUrl() returns a Base64 string
+
+                    // Decode the Base64 image
+                    byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+                    ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+                    Image image = new Image(bis);
+
+                    // Set the image to the corresponding ImageView (imgF1, imgF2, etc.)
+                    imageViews[i].setImage(image);
+                    break; // Exit loop once the matching item is found
+                }
+            }
+        }
+    }
+
+    private void setFunctionKey(int num) {
+        try {
+            itemBarcode.setText(shortCutService.getItemBarCodeById(num));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }catch (IndexOutOfBoundsException e){
+            showErrorDialog("Error", "This key is not item. Please add item first");
+        }
+        itemBarcode.requestFocus();
+        itemBarcode.fireEvent(
+                new KeyEvent(KeyEvent.KEY_PRESSED, KeyCode.ENTER.toString(), "", KeyCode.ENTER, false, false, false, false)
+        );
+    }
+
+    private void shortCut() {
+        itemBarcode.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case F1:
+                    setFunctionKey(1);
+                    break;
+
+                case F2:
+                    setFunctionKey(2);
+                    break;
+
+                case F3:
+                    setFunctionKey(3);
+                    break;
+
+                case F4:
+                    setFunctionKey(4);
+                    break;
+
+                case F5:
+                    setFunctionKey(5);
+                    break;
+
+                case F6:
+                    setFunctionKey(6);
+                    break;
+
+                case F7:
+                    setFunctionKey(7);
+                    break;
+
+                case F8:
+                    setFunctionKey(8);
+                    break;
+            }
+        });
+    }
+
+    private void showShortCutDialog() {
+        try {
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setResizable(false);
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/shortcut.fxml"))));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupAutoSuggestion() {
@@ -137,6 +283,9 @@ public class OrderController {
     }
 
     public void PlaceOrderOnAction(ActionEvent actionEvent) {
+        List<OrderTM> items = tblOrder.getItems();
+
+
 
     }
 
@@ -149,7 +298,7 @@ public class OrderController {
 
                 // Handle badge logic here
                 List<Badge> itemBadges = badgeList.stream()
-                        .filter(badge -> badge.getItem().getItemId() == item.getItemId())
+                        .filter(badge -> badge.getItem().getItemId() == item.getItemId() && badge.getStatus() == 1)
                         .toList();
 
                 if (itemBadges.size() == 1) {
@@ -174,6 +323,14 @@ public class OrderController {
                         popupStage.setScene(new Scene(popupRoot));
                         popupStage.initModality(Modality.APPLICATION_MODAL);
                         popupController.loadBadges(itemBadges, popupStage);
+
+                        popupStage.getScene().setOnKeyPressed(event -> {
+                            if (event.getCode() == KeyCode.ESCAPE) {
+                                popupStage.close(); // Close the stage when "Esc" is pressed
+                                itemBarcode.clear();
+                            }
+                        });
+
                         popupStage.show();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -195,15 +352,9 @@ public class OrderController {
 
     public void addRowTable(Badge badge, Item item) throws IOException {
         if (quantity.compareTo(BigDecimal.valueOf(-1)) == 0 || !isTrue){
-
-
-            System.out.println("Fail");
-            System.out.println(quantity.compareTo(BigDecimal.valueOf(-1)));
-            System.out.println(isTrue);
             return;
         }
 
-        System.out.println("Pass");
         if (item.getSellByStatus() == 1) {
             for (OrderTM orderTM : tblOrder.getItems()) {
                 if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
@@ -216,6 +367,7 @@ public class OrderController {
                     tblOrder.refresh();
                     itemBarcode.clear();
                     setLblTotal();
+                    setQuantity();
                     return;
                 }
             }
@@ -232,6 +384,11 @@ public class OrderController {
             tblOrder.getItems().add(orderTM);
             itemBarcode.clear();
             setLblTotal();
+            setQuantity();
+            for (Badge b : badgeList) {
+                System.out.println(b.getQuantity());
+            }
+            System.out.println("-------------------------------");
         }else {
             for (OrderTM orderTM : tblOrder.getItems()) {
                 if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
@@ -406,6 +563,54 @@ public class OrderController {
                         "No badge found with ID: " + orderBadgeId);
             }
         }
+    }
+
+    @FXML
+    public void F1OnAction(ActionEvent actionEvent) {
+        shortCutID = 1;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F2OnAction(ActionEvent actionEvent) {
+        shortCutID = 2;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F3OnAction(ActionEvent actionEvent) {
+        shortCutID = 3;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F4OnAction(ActionEvent actionEvent) {
+        shortCutID = 4;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F5OnAction(ActionEvent actionEvent) {
+        shortCutID = 5;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F6OnAction(ActionEvent actionEvent) {
+        shortCutID = 6;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F7OnAction(ActionEvent actionEvent) {
+        shortCutID = 7;
+        showShortCutDialog();
+    }
+
+    @FXML
+    public void F8OnAction(ActionEvent actionEvent) {
+        shortCutID = 8;
+        showShortCutDialog();
     }
 
 }

@@ -27,6 +27,8 @@ import static pos.system.project.controller.OrderController.badgeList;
 public class PopupController {
     @FXML
     public ScrollPane badgeScrollPane;
+    @FXML
+    public Label lblItemName;
     private int selectedIndex = -1; // To keep track of the currently selected card
     private List<AnchorPane> cardList; // To store the created cards (badges)
 
@@ -41,6 +43,7 @@ public class PopupController {
     }
 
     public void loadBadges(List<Badge> badgeList, Stage popupStage) {
+        lblItemName.setText(badgeList.get(0).getItem().getItemName());
         cardList = new ArrayList<>();
         badgeContainer.getChildren().clear();
 
@@ -148,22 +151,26 @@ public class PopupController {
         card.setPrefSize(600, 100);
 
         Label badgeIdLabel = new Label("Badge ID: " + badge.getBadgeId());
+        badgeIdLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         badgeIdLabel.setLayoutX(20);
         badgeIdLabel.setLayoutY(20);
 
-        Label badgeStatusLabel = new Label("Status: " + (badge.getStatus() == 1 ? "Active" : "Inactive"));
-        badgeStatusLabel.setLayoutX(20);
-        badgeStatusLabel.setLayoutY(50);
+//        Label badgeStatusLabel = new Label("Status: " + (badge.getStatus() == 1 ? "Active" : "Inactive"));
+//        badgeStatusLabel.setLayoutX(20);
+//        badgeStatusLabel.setLayoutY(50);
 
         Label quantityLabel = new Label("Quantity: " + badge.getQuantity());
+        quantityLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         quantityLabel.setLayoutX(20);
-        quantityLabel.setLayoutY(80);
+        quantityLabel.setLayoutY(50);
 
         Label priceLabel = new Label("Selling Price: " + badge.getSellingPrice());
+        priceLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         priceLabel.setLayoutX(300);
         priceLabel.setLayoutY(20);
 
         Label expiryDateLabel = new Label("Expiry Date: " + badge.getExpireDate().toString());
+        expiryDateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         expiryDateLabel.setLayoutX(300);
         expiryDateLabel.setLayoutY(50);
 
@@ -186,7 +193,7 @@ public class PopupController {
             }
         });
 
-        card.getChildren().addAll(badgeIdLabel, badgeStatusLabel, quantityLabel, priceLabel, expiryDateLabel);
+        card.getChildren().addAll(badgeIdLabel, quantityLabel, priceLabel, expiryDateLabel);
 
         return card;
     }
