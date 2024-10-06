@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @author Amil Srinath
  */
@@ -17,9 +19,11 @@ public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderDetailId;
+    private int badgeId;
     private int quantity;
     private double subTotal;
     private double itemPrice;
+    private Date createdDate = new Date();
 
     @ManyToOne
     @JoinColumn(name = "orderId")

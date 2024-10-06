@@ -56,11 +56,15 @@ public class ItemController {
     int currentItemSelectedId = -1;
 
     @FXML
+    public TextField itemDescription;
+    @FXML
     public ImageView iconEdit;
     @FXML
     public ImageView imageView;
     @FXML
     public TableColumn<?,?> colTableItemID;
+    @FXML
+    public TableColumn<Item,String> colItemDescription;
     @FXML
     public TableColumn<Item,String> colItemSellBy;
     @FXML
@@ -123,7 +127,7 @@ public class ItemController {
                 lblPurchasePrice.setText("Purchase Price(unit)");
                 lblSellingPrice.setText("Selling Price(unit)");
             } else if (newValue.equals("Fraction")) {
-                lblQuantity.setText("Quantity");
+                lblQuantity.setText("Quantity(g)");
                 lblPurchasePrice.setText("Purchase Price(1Kg)");
                 lblSellingPrice.setText("Selling Price(1Kg)");
             }
@@ -186,6 +190,7 @@ public class ItemController {
                     badgeService.addBadge(
                             new Badge(
                                     0, // Assuming badgeId is auto-generated
+                                    itemDescription.getText(),
                                     Double.parseDouble(itemPurchasePrice.getText()), // Purchase Price
                                     Double.parseDouble(itemSellingPrice.getText()), // Selling Price
                                     qty,          // Quantity
@@ -208,16 +213,6 @@ public class ItemController {
         // If the item doesn't already exist, add the new item
         BigDecimal qty = new BigDecimal(itemQty.getText());
 
-        switch (cmbSellBy.getSelectionModel().getSelectedIndex()) {
-            case 0:
-                qty = qty;
-                break;
-            case 1:
-                qty = qty.multiply(BigDecimal.valueOf(1000));
-                break;
-            default:
-                break;
-        }
         itemService.addItem(
                 new ItemDTO(
                         itemName.getText(),
@@ -227,6 +222,7 @@ public class ItemController {
                         base64Image
                 ),
                 new BadgeDTO(
+                        itemDescription.getText(),
                         Double.parseDouble(itemPurchasePrice.getText()),
                         Double.parseDouble(itemSellingPrice.getText()),
                         qty,
@@ -273,6 +269,7 @@ public class ItemController {
         BigDecimal qty = new BigDecimal(itemQty.getText());
 
         BadgeDTO badgeDTO = new BadgeDTO(
+                itemDescription.getText(),
                 Double.parseDouble(itemPurchasePrice.getText()),
                 Double.parseDouble(itemSellingPrice.getText()),
                 qty,
@@ -298,11 +295,14 @@ public class ItemController {
             Badge badge = tblBadge.getSelectionModel().getSelectedItem();
 
             // Display the badge details in the corresponding text fields
+            itemDescription.setText(badge.getDescription());
             itemBarcode.setText(badge.getItem().getItemBarcode());
             itemPurchasePrice.setText(String.valueOf(badge.getPurchasePrice()));
             itemSellingPrice.setText(String.valueOf(badge.getSellingPrice()));
             itemQty.setText(String.valueOf(badge.getQuantity().doubleValue()));
             itemExpireDate.setValue(LocalDate.parse(badge.getExpireDate()));
+
+            cmbSellBy.setValue(1 == badge.getItem().getSellByStatus() ? "Unit" : "Fraction");
 
             for (Item i : itemList) {
                 if (i.getItemId() == badge.getItem().getItemId()) {
@@ -535,7 +535,7 @@ public class ItemController {
                 return new SimpleObjectProperty<>(0);
             }
         });
-
+        colItemDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colItemQty.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         colItemPurchasePrice.setCellValueFactory(new PropertyValueFactory<>("purchasePrice"));
         colItemSellingPrice.setCellValueFactory(new PropertyValueFactory<>("sellingPrice"));
@@ -569,7 +569,6 @@ public class ItemController {
             try {
                 // Convert the image to base64 string
                 String base64String = imageToBase64(selectedFile);
-                System.out.println("Base64 String: " + base64String);
                 base64Image = base64String;
 
                 // Display the selected image in the ImageView

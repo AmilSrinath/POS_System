@@ -63,6 +63,7 @@ public class ItemServiceImpl implements ItemService {
             System.out.println("Service: "+badgeDTO.getQuantity());
             Badge badge = new Badge(
                     0,  // Assuming ID is auto-generated
+                    badgeDTO.getDescription(),
                     badgeDTO.getPurchasePrice(),
                     badgeDTO.getSellingPrice(),
                     badgeDTO.getQuantity(),
@@ -113,6 +114,7 @@ public class ItemServiceImpl implements ItemService {
             Badge existingBadge = session.get(Badge.class, currentBadgeSelectedId);
             if (existingBadge != null) {
                 // Update the Badge entity with data from BadgeDTO
+                existingBadge.setDescription(badgeDTO.getDescription());
                 existingBadge.setPurchasePrice(badgeDTO.getPurchasePrice());
                 existingBadge.setSellingPrice(badgeDTO.getSellingPrice());
                 existingBadge.setQuantity(badgeDTO.getQuantity());

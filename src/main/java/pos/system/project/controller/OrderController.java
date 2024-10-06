@@ -1,9 +1,5 @@
 package pos.system.project.controller;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,22 +11,21 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Duration;
-import pos.system.project.entity.Badge;
-import pos.system.project.entity.Item;
-import pos.system.project.entity.ShortCut;
+import pos.system.project.dto.OrderDTO;
+import pos.system.project.dto.OrderDetailsDTO;
+import pos.system.project.entity.*;
 import pos.system.project.entity.tm.OrderTM;
 import pos.system.project.service.BadgeService;
 import pos.system.project.service.ItemService;
+import pos.system.project.service.OrderService;
 import pos.system.project.service.ShortCutService;
 import pos.system.project.service.impl.BadgeServiceImpl;
 import pos.system.project.service.impl.ItemServiceImpl;
+import pos.system.project.service.impl.OrderServiceImpl;
 import pos.system.project.service.impl.ShortCutServiceImpl;
 
 import javax.imageio.ImageIO;
@@ -39,6 +34,8 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 
@@ -84,6 +81,7 @@ public class OrderController {
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
     ShortCutService shortCutService = new ShortCutServiceImpl();
+    OrderService orderService = new OrderServiceImpl();
 
     public static List<Item> itemList;
     public static List<Badge> badgeList;
@@ -125,12 +123,6 @@ public class OrderController {
         colAction.setCellFactory(getDeleteButtonCellFactory());
 
         setupAutoSuggestion();
-
-        for (Badge badge : badgeList) {
-            System.out.println(badge.getQuantity());
-        }
-        System.out.println("-------------------------------");
-
         shortCut();
         setImageForShortCuts();
     }
@@ -139,24 +131,20 @@ public class OrderController {
         List<ShortCut> shortCuts = shortCutService.getAllShortCuts();
         ImageView[] imageViews = {imgF1, imgF2, imgF3, imgF4, imgF5, imgF6, imgF7, imgF8};
 
-        // Iterate through shortcuts and items to set images
         for (int i = 0; i < shortCuts.size() && i < imageViews.length; i++) {
             ShortCut shortCut = shortCuts.get(i);
             String itemBarcode = shortCutService.getItemBarCodeById(shortCut.getShortcutId());
 
-            // Find the corresponding item in the itemList
             for (Item item : itemList) {
                 if (item.getItemBarcode().equals(itemBarcode)) {
-                    String base64Image = item.getImageUrl(); // Assuming getImageUrl() returns a Base64 string
+                    String base64Image = item.getImageUrl();
 
-                    // Decode the Base64 image
                     byte[] imageBytes = Base64.getDecoder().decode(base64Image);
                     ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
                     Image image = new Image(bis);
 
-                    // Set the image to the corresponding ImageView (imgF1, imgF2, etc.)
                     imageViews[i].setImage(image);
-                    break; // Exit loop once the matching item is found
+                    break;
                 }
             }
         }
@@ -282,11 +270,49 @@ public class OrderController {
         }
     }
 
-    public void PlaceOrderOnAction(ActionEvent actionEvent) {
+    public void PlaceOrderOnAction(ActionEvent actionEvent) throws IOException {
         List<OrderTM> items = tblOrder.getItems();
 
+        if (items.isEmpty()) {
+            showErrorDialog("Error", "Please add item to order");
+            return;
+        }
 
+        OrderDTO order = new OrderDTO();
+        order.setTotal(Double.parseDouble(lblTotal.getText()));
+        order.setUser(HomeController.user);
+        order.setCustomer(null);
 
+        Order saveOrder = orderService.saveOrder(order);
+
+        for (OrderTM item : items) {
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+
+            for (Badge badge : badgeList) {
+                if (badge.getBadgeId() == item.getBadgeId()) {
+                    orderDetailsDTO.setQuantity((int) item.getQuantity());
+                    orderDetailsDTO.setOrder(saveOrder);
+                    orderDetailsDTO.setUser(HomeController.user);
+                    orderDetailsDTO.setItem(badge.getItem());
+                    orderDetailsDTO.setSubTotal(item.getSubTotal());
+                    orderDetailsDTO.setItemPrice(item.getUnitPrice());
+                    orderDetailsDTO.setBadgeId(badge.getBadgeId());
+                }
+            }
+
+            orderService.saveOrderDetails(orderDetailsDTO);
+        }
+
+        for (OrderTM item : items) {
+            orderService.updateQuantity(item.getBadgeId(), (int) item.getQuantity());
+        }
+
+        itemList = itemService.getAllItems();
+        badgeList = badgeService.getAllBadges();
+
+        //clear
+//        tblOrder.getItems().clear();
+//        lblTotal.setText("0.00");
     }
 
     @FXML
@@ -296,7 +322,6 @@ public class OrderController {
             if (item.getItemBarcode().equals(itemBarcode.getText())) {
                 itemFound = true;
 
-                // Handle badge logic here
                 List<Badge> itemBadges = badgeList.stream()
                         .filter(badge -> badge.getItem().getItemId() == item.getItemId() && badge.getStatus() == 1)
                         .toList();
@@ -357,7 +382,7 @@ public class OrderController {
 
         if (item.getSellByStatus() == 1) {
             for (OrderTM orderTM : tblOrder.getItems()) {
-                if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
+                if (orderTM.getBadgeId() == badge.getBadgeId()) {
                     double qty = orderTM.getQuantity();
                     BigDecimal qtyBigDecimal = BigDecimal.valueOf(qty);
                     qtyBigDecimal = qtyBigDecimal.add(quantity);
@@ -374,7 +399,7 @@ public class OrderController {
 
             OrderTM orderTM = new OrderTM();
             orderTM.setItemBarcode(item.getItemBarcode());
-            orderTM.setItemName(item.getItemName());
+            orderTM.setItemName(badge.getDescription());
             orderTM.setBadgeId(badge.getBadgeId());
             orderTM.setQuantity(quantity.doubleValue());
             orderTM.setUnitPrice(badge.getSellingPrice());
@@ -385,13 +410,9 @@ public class OrderController {
             itemBarcode.clear();
             setLblTotal();
             setQuantity();
-            for (Badge b : badgeList) {
-                System.out.println(b.getQuantity());
-            }
-            System.out.println("-------------------------------");
         }else {
             for (OrderTM orderTM : tblOrder.getItems()) {
-                if (orderTM.getItemBarcode().equals(item.getItemBarcode()) && orderTM.getUnitPrice() == badge.getSellingPrice()) {
+                if (orderTM.getBadgeId() == badge.getBadgeId()) {
                     double currentQty = orderTM.getQuantity();
                     BigDecimal currentQtyBigDecimal = BigDecimal.valueOf(currentQty);
 
@@ -405,17 +426,12 @@ public class OrderController {
                     setLblTotal();
 
                     setQuantity();
-                    for (Badge b : badgeList) {
-                        System.out.println(b.getQuantity());
-                    }
-                    System.out.println("-------------------------------");
-
                     return;
                 }
             }
             OrderTM orderTM = new OrderTM();
             orderTM.setItemBarcode(item.getItemBarcode());
-            orderTM.setItemName(item.getItemName());
+            orderTM.setItemName(badge.getDescription());
             orderTM.setQuantity(quantity.doubleValue());
             orderTM.setUnitPrice(badge.getSellingPrice());
             orderTM.setBadgeId(badge.getBadgeId());
@@ -429,10 +445,6 @@ public class OrderController {
             setLblTotal();
         }
         setQuantity();
-        for (Badge b : badgeList) {
-            System.out.println(b.getQuantity());
-        }
-        System.out.println("-------------------------------");
     }
 
     public void setLblTotal() {
@@ -464,14 +476,12 @@ public class OrderController {
                     private final Button deleteButton = new Button();
 
                     {
-                        // Load the delete icon image
                         Image deleteIcon = new Image(getClass().getResourceAsStream("/assest/icon/icons8-delete-100.png"));
                         ImageView imageView = new ImageView(deleteIcon);
-                        imageView.setFitHeight(20); // Set desired height
-                        imageView.setFitWidth(20);  // Set desired width
-                        deleteButton.setGraphic(imageView); // Set the ImageView as the button's graphic
+                        imageView.setFitHeight(20);
+                        imageView.setFitWidth(20);
+                        deleteButton.setGraphic(imageView);
 
-                        // Button action to delete the row
                         deleteButton.setOnAction((ActionEvent event) -> {
                             OrderTM selectedOrder = getTableView().getItems().get(getIndex());
                             tblOrder.getItems().remove(selectedOrder);
@@ -479,15 +489,10 @@ public class OrderController {
 
                             setLblTotal();
                             try {
-                                setQuantity(); // Update the badge quantities in the badgeList
+                                setQuantity();
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
-
-                            for (Badge b : badgeList) {
-                                System.out.println(b.getQuantity());
-                            }
-                            System.out.println("-------------------------------");
                         });
                     }
 
@@ -512,30 +517,24 @@ public class OrderController {
         String barcode = orderTM.getItemBarcode();
         BigDecimal removedQuantity = BigDecimal.valueOf(orderTM.getQuantity());
 
-        // Find the corresponding badge(s) in badgeList based on the item barcode
         List<Badge> badges = badgeList.stream()
                 .filter(badge -> badge.getItem().getItemBarcode().equals(barcode))
                 .toList();
 
         for (Badge badge : badges) {
-            // Add the removed quantity back to the available quantity
             BigDecimal updatedQuantity = badge.getQuantity().add(removedQuantity);
             badge.setQuantity(updatedQuantity);
-            System.out.println("Restored quantity for Badge ID " + badge.getBadgeId() + ": " + updatedQuantity);
-            break; // Since we only want to update one badge, break the loop
+            break;
         }
     }
 
     public void setQuantity() throws IOException {
-        // Reset badge quantities to original values by fetching from service
         badgeList = badgeService.getAllBadges();
 
-        // Reduce the quantity based on the items currently in the tblOrder
         for (OrderTM orderTM : tblOrder.getItems()) {
             int orderBadgeId = orderTM.getBadgeId(); // Get badgeId from the order row
             BigDecimal orderedQuantity = BigDecimal.valueOf(orderTM.getQuantity());
 
-            // Find the corresponding badge in badgeList based on the badgeId
             Badge badge = badgeList.stream()
                     .filter(b -> b.getBadgeId() == orderBadgeId)
                     .findFirst()
@@ -543,24 +542,17 @@ public class OrderController {
 
             if (badge != null) {
                 BigDecimal availableQuantity = badge.getQuantity();
-
-                // Subtract the ordered quantity from the badge's available quantity
                 BigDecimal updatedQuantity = availableQuantity.subtract(orderedQuantity);
 
                 if (updatedQuantity.compareTo(BigDecimal.ZERO) < 0) {
-                    // If the resulting quantity is negative, handle the error appropriately
                     showErrorDialog("Insufficient Stock",
                             "Not enough stock for Badge ID: " + orderBadgeId + ". Available: " + availableQuantity);
-                    return; // Stop processing further if insufficient stock is found
+                    return;
                 } else {
-                    // Update the badge's quantity in the badgeList
                     badge.setQuantity(updatedQuantity);
-                    System.out.println("Updated quantity for Badge ID " + badge.getBadgeId() + ": " + updatedQuantity);
                 }
             } else {
-                // If no matching badge is found, show an error (optional)
-                showErrorDialog("Badge Not Found",
-                        "No badge found with ID: " + orderBadgeId);
+                showErrorDialog("Badge Not Found", "No badge found with ID: " + orderBadgeId);
             }
         }
     }

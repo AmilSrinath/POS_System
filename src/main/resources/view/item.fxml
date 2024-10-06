@@ -17,11 +17,11 @@
 
 <AnchorPane prefHeight="1024.0" prefWidth="1680.0" styleClass="root" stylesheets="@../Styles/CSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.ItemController">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="171.0" layoutX="147.0" layoutY="249.0" stroke="BLACK" strokeType="INSIDE" width="190.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="110.0" layoutX="147.0" layoutY="253.0" stroke="BLACK" strokeType="INSIDE" width="190.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="53.0" layoutX="147.0" layoutY="254.0" stroke="BLACK" strokeType="INSIDE" width="190.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="200.0" layoutX="169.0" layoutY="240.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="182.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="42.0" layoutX="97.0" layoutY="219.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="129.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="171.0" layoutX="677.0" layoutY="304.0" stroke="BLACK" strokeType="INSIDE" width="190.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="110.0" layoutX="677.0" layoutY="308.0" stroke="BLACK" strokeType="INSIDE" width="190.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="53.0" layoutX="677.0" layoutY="309.0" stroke="BLACK" strokeType="INSIDE" width="190.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="200.0" layoutX="699.0" layoutY="295.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="182.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f4f4f4" height="42.0" layoutX="627.0" layoutY="274.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="129.0" />
       <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
          <children>
             <Label layoutX="1171.0" layoutY="35.0" text="Date" textFill="WHITE">
@@ -68,7 +68,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <Text fx:id="lblPurchasePrice" layoutX="177.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Purchase Price(unit)">
+      <Text fx:id="lblPurchasePrice" layoutX="707.0" layoutY="424.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Purchase Price(unit)">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
@@ -78,17 +78,17 @@
             <Font size="17.0" />
          </font>
       </TextField>
-      <TextField fx:id="itemPurchasePrice" layoutX="363.0" layoutY="347.0" prefHeight="33.0" prefWidth="210.0">
+      <TextField fx:id="itemPurchasePrice" layoutX="893.0" layoutY="402.0" prefHeight="33.0" prefWidth="210.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <TextField fx:id="itemSellingPrice" layoutX="363.0" layoutY="403.0" prefHeight="33.0" prefWidth="210.0">
+      <TextField fx:id="itemSellingPrice" layoutX="893.0" layoutY="458.0" prefHeight="33.0" prefWidth="210.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <Text fx:id="lblSellingPrice" layoutX="177.0" layoutY="425.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selling Price(unit)">
+      <Text fx:id="lblSellingPrice" layoutX="707.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selling Price(unit)">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
@@ -118,7 +118,7 @@
             <TableColumn fx:id="colItemSellBy" prefWidth="104.0" text="Sell By" />
          </columns>
       </TableView>
-      <Text fx:id="lblQuantity" layoutX="177.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity">
+      <Text fx:id="lblQuantity" layoutX="707.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
@@ -134,50 +134,51 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <Text layoutX="127.0" layoutY="256.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell By">
+      <Text layoutX="657.0" layoutY="311.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell By">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <ComboBox fx:id="cmbSellBy" layoutX="305.0" layoutY="234.0" prefHeight="33.0" prefWidth="271.0" style="-fx-font-size: 17;" />
-      <TextField fx:id="itemQty" layoutX="364.0" layoutY="291.0" prefHeight="33.0" prefWidth="210.0">
+      <ComboBox fx:id="cmbSellBy" layoutX="835.0" layoutY="289.0" prefHeight="33.0" prefWidth="271.0" style="-fx-font-size: 17;" />
+      <TextField fx:id="itemQty" layoutX="894.0" layoutY="346.0" prefHeight="33.0" prefWidth="210.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <Text layoutX="657.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category">
+      <Text layoutX="127.0" layoutY="328.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <ComboBox fx:id="cmbCategory" layoutX="835.0" layoutY="285.0" onMouseClicked="#cmbCategoryOnMouseClicked" prefHeight="33.0" prefWidth="231.0" style="-fx-font-size: 17;" visibleRowCount="4" />
-      <Text layoutX="657.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
+      <ComboBox fx:id="cmbCategory" layoutX="305.0" layoutY="306.0" onMouseClicked="#cmbCategoryOnMouseClicked" prefHeight="33.0" prefWidth="231.0" style="-fx-font-size: 17;" visibleRowCount="4" />
+      <Text layoutX="127.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <TextField fx:id="itemBarcode" layoutX="834.0" layoutY="182.0" prefHeight="33.0" prefWidth="271.0">
+      <TextField fx:id="itemBarcode" layoutX="304.0" layoutY="245.0" prefHeight="33.0" prefWidth="271.0">
          <font>
             <Font size="17.0" />
          </font>
       </TextField>
-      <ImageView fitHeight="33.0" fitWidth="34.0" layoutX="1072.0" layoutY="287.0" onMouseClicked="#addCategoryOnMouseClicked" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="33.0" fitWidth="34.0" layoutX="542.0" layoutY="308.0" onMouseClicked="#addCategoryOnMouseClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assest/icon/icons8-plus-240.png" />
          </image>
       </ImageView>
-      <Text layoutX="657.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image">
+      <Text layoutX="128.0" layoutY="390.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Image">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
       <TableView fx:id="tblBadge" layoutX="970.0" layoutY="544.0" onMouseClicked="#tableOnMouseClicked" prefHeight="427.0" prefWidth="568.0" style="-fx-font-size: 16;">
          <columns>
-            <TableColumn fx:id="colItemID" prefWidth="114.0" text="Item ID" />
-            <TableColumn fx:id="colItemQty" prefWidth="110.0" text="Quantity" />
-            <TableColumn fx:id="colItemPurchasePrice" prefWidth="119.0" text="Purchase Price" />
-            <TableColumn fx:id="colItemSellingPrice" prefWidth="110.0" text="Selling Price" />
-            <TableColumn fx:id="colItemExpireDate" prefWidth="114.0" text="Expire Date" />
+            <TableColumn fx:id="colItemID" prefWidth="64.0" text="Item ID" />
+            <TableColumn fx:id="colItemDescription" prefWidth="138.0" text="Description" />
+            <TableColumn fx:id="colItemQty" prefWidth="74.0" text="Quantity" />
+            <TableColumn fx:id="colItemPurchasePrice" prefWidth="112.0" text="Purchase Price" />
+            <TableColumn fx:id="colItemSellingPrice" prefWidth="90.0" text="Selling Price" />
+            <TableColumn fx:id="colItemExpireDate" prefWidth="89.0" text="Expire Date" />
          </columns>
       </TableView>
       <Text layoutX="521.0" layoutY="530.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Details">
@@ -190,14 +191,24 @@
             <Font name="Poppins Bold" size="17.0" />
          </font>
       </Text>
-      <ImageView fx:id="imageView" fitHeight="117.0" fitWidth="129.0" layoutX="834.0" layoutY="356.0" onMouseClicked="#addImageOnMouseClicked" onMouseEntered="#imageViewOnMouseEntered" onMouseExited="#imageViewOnMouseExited" pickOnBounds="true" preserveRatio="true" styleClass="home-top-bar">
+      <ImageView fx:id="imageView" fitHeight="117.0" fitWidth="129.0" layoutX="305.0" layoutY="377.0" onMouseClicked="#addImageOnMouseClicked" onMouseEntered="#imageViewOnMouseEntered" onMouseExited="#imageViewOnMouseExited" pickOnBounds="true" preserveRatio="true" styleClass="home-top-bar">
          <image>
             <Image url="@../assest/icon/icons8-image-upload-100.png" />
          </image></ImageView>
-      <ImageView fx:id="iconEdit" fitHeight="42.0" fitWidth="44.0" layoutX="872.0" layoutY="386.0" onMouseClicked="#addImageOnMouseClicked" onMouseEntered="#imageViewOnMouseEntered" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="iconEdit" fitHeight="42.0" fitWidth="44.0" layoutX="343.0" layoutY="407.0" onMouseClicked="#addImageOnMouseClicked" onMouseEntered="#imageViewOnMouseEntered" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../assest/icon/icons8-edit-100.png" />
          </image>
       </ImageView>
+      <Text layoutX="655.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Description">
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Text>
+      <TextField fx:id="itemDescription" layoutX="832.0" layoutY="182.0" prefHeight="33.0" prefWidth="271.0">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>

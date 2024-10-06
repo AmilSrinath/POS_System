@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Data
 public class BadgeDTO {
+    private String description;
     private double purchasePrice;
     private double sellingPrice;
     private BigDecimal quantity;

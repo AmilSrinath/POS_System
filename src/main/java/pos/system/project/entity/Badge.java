@@ -19,6 +19,7 @@ public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int badgeId;
+    private String description;
     private double purchasePrice;
     private double sellingPrice;
     private BigDecimal quantity;

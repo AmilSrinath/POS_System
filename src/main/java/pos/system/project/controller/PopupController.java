@@ -155,14 +155,15 @@ public class PopupController {
         badgeIdLabel.setLayoutX(20);
         badgeIdLabel.setLayoutY(20);
 
-//        Label badgeStatusLabel = new Label("Status: " + (badge.getStatus() == 1 ? "Active" : "Inactive"));
-//        badgeStatusLabel.setLayoutX(20);
-//        badgeStatusLabel.setLayoutY(50);
+        Label badgeStatusLabel = new Label("Badge Name: " + badge.getDescription());
+        badgeStatusLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+        badgeStatusLabel.setLayoutX(20);
+        badgeStatusLabel.setLayoutY(50);
 
         Label quantityLabel = new Label("Quantity: " + badge.getQuantity());
         quantityLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
         quantityLabel.setLayoutX(20);
-        quantityLabel.setLayoutY(50);
+        quantityLabel.setLayoutY(80);
 
         Label priceLabel = new Label("Selling Price: " + badge.getSellingPrice());
         priceLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
@@ -193,7 +194,7 @@ public class PopupController {
             }
         });
 
-        card.getChildren().addAll(badgeIdLabel, quantityLabel, priceLabel, expiryDateLabel);
+        card.getChildren().addAll(badgeIdLabel, badgeStatusLabel, quantityLabel, priceLabel, expiryDateLabel);
 
         return card;
     }
@@ -216,11 +217,15 @@ public class PopupController {
                     dialog.setContentText("Quantity:");
                 } else {
                     dialog.setTitle("Enter Quantity");
-                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity() + "g");
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() +
+                            "\nAvailable Stock: " + badge.getQuantity() + "g"
+                    );
                     dialog.setContentText("Quantity:");
                 }
             }
         }
+
+        dialog.getDialogPane().lookup(".text-field").setStyle("-fx-font-size: 18px;");
 
         // Show dialog and capture result
         Optional<String> result = dialog.showAndWait();
