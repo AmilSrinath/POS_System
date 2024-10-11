@@ -25,6 +25,7 @@ public class Badge {
     private BigDecimal quantity;
     private String expireDate;
     private int status;
+    private int quantityType;
 
     @ManyToOne
     @JoinColumn(name = "itemId")

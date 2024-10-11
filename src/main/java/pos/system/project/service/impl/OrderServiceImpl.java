@@ -70,17 +70,29 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateQuantity(int badgeId, int incomingQuantity) throws IOException {
+    public void updateQuantity(int badgeId, double incomingQuantity, double milliliter, int status) throws IOException {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = null;
+
+        System.out.println(milliliter);
 
         try {
             transaction = session.beginTransaction();
             Badge badge = session.get(Badge.class, badgeId);
             if (badge != null) {
+                BigDecimal updatedQuantity = null;
                 BigDecimal currentQuantity = badge.getQuantity();
-
-                BigDecimal updatedQuantity = currentQuantity.subtract(BigDecimal.valueOf(incomingQuantity));
+                if (status == 0) {
+                    updatedQuantity = currentQuantity.subtract(BigDecimal.valueOf(incomingQuantity));
+                } else if (status == 1) {
+                    updatedQuantity = currentQuantity.subtract(BigDecimal.valueOf(187.5));
+                } else if (status == 2) {
+                    updatedQuantity = currentQuantity.subtract(BigDecimal.valueOf(375));
+                } else if (status == 3) {
+                    updatedQuantity = currentQuantity.subtract(BigDecimal.valueOf(750));
+                } else if (status == 4) {
+                    updatedQuantity = currentQuantity.subtract(BigDecimal.valueOf(milliliter*1000));
+                }
 
                 badge.setQuantity(updatedQuantity);
                 session.update(badge);

@@ -20,7 +20,7 @@ public class OrderDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderDetailId;
     private int badgeId;
-    private int quantity;
+    private double quantity;
     private double subTotal;
     private double itemPrice;
     private Date createdDate = new Date();

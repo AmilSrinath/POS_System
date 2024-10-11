@@ -1,8 +1,12 @@
 package pos.system.project.service.impl;
 
+import com.mysql.cj.jdbc.exceptions.PacketTooBigException;
+import javafx.scene.control.Alert;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 import pos.system.project.controller.HomeController;
 import pos.system.project.controller.ItemController;
 import pos.system.project.dto.BadgeDTO;
@@ -60,7 +64,6 @@ public class ItemServiceImpl implements ItemService {
             session.persist(item);
 
             // Create and persist the associated Badge
-            System.out.println("Service: "+badgeDTO.getQuantity());
             Badge badge = new Badge(
                     0,  // Assuming ID is auto-generated
                     badgeDTO.getDescription(),
@@ -69,6 +72,7 @@ public class ItemServiceImpl implements ItemService {
                     badgeDTO.getQuantity(),
                     badgeDTO.getExpireDate(),
                     1,  // Status = Active
+                    badgeDTO.getQuantityType(),
                     item  // Associate with the newly created Item
             );
 
@@ -76,16 +80,32 @@ public class ItemServiceImpl implements ItemService {
 
             // Commit transaction
             transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();  // Rollback in case of an error
+        } catch (HibernateException e) {
+            // Check if the cause is PacketTooBigException
+            Throwable cause = e.getCause();
+            if (cause instanceof com.mysql.cj.jdbc.exceptions.PacketTooBigException) {
+                // Show alert for PacketTooBigException
+                showAlert("Error", "Please check your image size and try again.");
+            } else {
+                throw new IOException("Error while saving the item and badge", e);
             }
-            throw new IOException("Error while saving the item and badge", e);
+
+            if (transaction != null) {
+                transaction.rollback();  // Rollback in case of error
+            }
         } finally {
             if (session != null) {
                 session.close();  // Ensure session is closed
             }
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @Override
@@ -140,7 +160,28 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void deleteItem(int itemId) throws IOException {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            session = FactoryConfiguration.getInstance().getSession();
+            transaction = session.beginTransaction();
 
+            // Use parameterized query to prevent SQL injection
+            Query query = session.createNativeQuery("UPDATE item SET status = 0 WHERE itemId = :itemId");
+            query.setParameter("itemId", itemId);
+            query.executeUpdate();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback(); // Rollback in case of failure
+            }
+            throw new IOException("Failed to delete item", e);
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure session is closed
+            }
+        }
     }
 
     @Override

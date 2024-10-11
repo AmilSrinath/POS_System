@@ -12,5 +12,5 @@ import java.io.IOException;
 public interface OrderService {
     Order saveOrder(OrderDTO orderDTO) throws IOException;
     void saveOrderDetails(OrderDetailsDTO orderDetailsDTO) throws IOException;
-    void updateQuantity(int badgeId, int quantity) throws IOException;
+    void updateQuantity(int badgeId, double quantity, double milliliter, int status) throws IOException;
 }

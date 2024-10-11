@@ -18,4 +18,5 @@ public class BadgeDTO {
     private double sellingPrice;
     private BigDecimal quantity;
     private String expireDate;
+    private int quantityType;
 }

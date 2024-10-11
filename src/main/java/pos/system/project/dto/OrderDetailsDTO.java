@@ -14,7 +14,7 @@ import pos.system.project.entity.User;
 @NoArgsConstructor
 @Data
 public class OrderDetailsDTO {
-    private int quantity;
+    private double quantity;
     private double subTotal;
     private double itemPrice;
     private int badgeId;

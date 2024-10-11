@@ -1,11 +1,9 @@
 package pos.system.project.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -212,15 +210,80 @@ public class PopupController {
         for (Item item : orderController.itemList) {
             if (item.getItemId() == badge.getItem().getItemId()) {
                 if (item.getSellByStatus() == 1) {
+                    dialog = new TextInputDialog();
                     dialog.setTitle("Enter Quantity");
                     dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity());
                     dialog.setContentText("Quantity:");
-                } else {
+                } else if (item.getSellByStatus() == 2) {
                     dialog.setTitle("Enter Quantity");
                     dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() +
                             "\nAvailable Stock: " + badge.getQuantity() + "g"
                     );
                     dialog.setContentText("Quantity:");
+                } else if (item.getSellByStatus() == 3) { //liquid
+                    Dialog<String> customDialog = new Dialog<>();
+                    customDialog.setTitle("Select Bottle Type");
+                    customDialog.setHeaderText("Choose bottle type for Badge ID: " + badge.getBadgeId() +
+                            "\nAvailable Stock: " + badge.getQuantity() + " bottles"
+                    );
+
+                    // Add buttons to the dialog
+                    ButtonType bottleButton = new ButtonType("Bottle", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType halfBottleButton = new ButtonType("Half Bottle", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType quarterBottleButton = new ButtonType("Quarter Bottle", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType otherButton = new ButtonType("Other", ButtonBar.ButtonData.OK_DONE);
+                    ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                    customDialog.getDialogPane().getButtonTypes().addAll(bottleButton, halfBottleButton, quarterBottleButton, otherButton, cancelButton);
+
+                    // Handle button clicks
+                    customDialog.setResultConverter(dialogButton -> {
+                        if (dialogButton == bottleButton) {
+                            return "Bottle";
+                        } else if (dialogButton == halfBottleButton) {
+                            return "Half Bottle";
+                        } else if (dialogButton == quarterBottleButton) {
+                            return "Quarter Bottle";
+                        } else if (dialogButton == otherButton) {
+                            return "Other";
+                        }
+                        return null;
+                    });
+
+                    // Show the dialog and get the result
+                    Optional<String> result = customDialog.showAndWait();
+                    result.ifPresent(bottleType -> {
+                        orderController.isLeter = false;
+                        if (bottleType.equals("Bottle")) {
+                            orderController.quantity = BigDecimal.valueOf(4);
+                            orderController.milliliters = 187.5;
+                            orderController.status = 3;
+                        } else if (bottleType.equals("Half Bottle")) {
+                            orderController.quantity = BigDecimal.valueOf(2);
+                            orderController.milliliters = 375;
+                            orderController.status = 2;
+                        } else if (bottleType.equals("Quarter Bottle")) {
+                            orderController.quantity = BigDecimal.valueOf(1);
+                            orderController.milliliters = 750;
+                            orderController.status = 1;
+                        } else if (bottleType.equals("Other")) {
+                            TextInputDialog customDialog2 = new TextInputDialog();
+                            customDialog2.setTitle("Enter Quantity");
+                            customDialog2.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() +
+                                    "\nAvailable Stock: " + badge.getQuantity() + " ml"
+                            );
+                            customDialog2.setContentText("Quantity(litres):");
+                            Optional<String> result2 = customDialog2.showAndWait();
+                            result2.ifPresent(quantity -> {
+                                orderController.isLeter = true;
+                                orderController.unitePrice = (badge.getSellingPrice() / 187.5) * 1000;
+                                orderController.quantity = new BigDecimal(quantity);
+                                orderController.milliliters = Double.parseDouble(quantity);
+                                orderController.status = 4;
+                            });
+                        }
+                    });
+                    return;
                 }
             }
         }

@@ -78,6 +78,11 @@ public class OrderController {
     @FXML
     public ImageView imgF8;
 
+    public double unitePrice;
+    public boolean isLeter;
+    public double milliliters;
+    public int status;
+
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
     ShortCutService shortCutService = new ShortCutServiceImpl();
@@ -242,6 +247,7 @@ public class OrderController {
     private List<MenuItem> getSuggestions(String query) {
         List<MenuItem> suggestions = itemList.stream()
                 .filter(item -> item.getItemName().toLowerCase().contains(query.toLowerCase()))
+                .filter(item -> item.getStatus() == 1)
                 .map(item -> {
                     MenuItem suggestion = new MenuItem(item.getItemName());
                     suggestion.setOnAction(e -> {
@@ -290,7 +296,7 @@ public class OrderController {
 
             for (Badge badge : badgeList) {
                 if (badge.getBadgeId() == item.getBadgeId()) {
-                    orderDetailsDTO.setQuantity((int) item.getQuantity());
+                    orderDetailsDTO.setQuantity(item.getQuantity());
                     orderDetailsDTO.setOrder(saveOrder);
                     orderDetailsDTO.setUser(HomeController.user);
                     orderDetailsDTO.setItem(badge.getItem());
@@ -304,7 +310,7 @@ public class OrderController {
         }
 
         for (OrderTM item : items) {
-            orderService.updateQuantity(item.getBadgeId(), (int) item.getQuantity());
+            orderService.updateQuantity(item.getBadgeId(), item.getQuantity(), item.getMilliliter(), item.getStatus());
         }
 
         itemList = itemService.getAllItems();
@@ -410,7 +416,7 @@ public class OrderController {
             itemBarcode.clear();
             setLblTotal();
             setQuantity();
-        }else {
+        }else if (item.getSellByStatus() == 2) {
             for (OrderTM orderTM : tblOrder.getItems()) {
                 if (orderTM.getBadgeId() == badge.getBadgeId()) {
                     double currentQty = orderTM.getQuantity();
@@ -443,6 +449,38 @@ public class OrderController {
             tblOrder.getItems().add(orderTM);
             itemBarcode.clear();
             setLblTotal();
+        } else if (item.getSellByStatus() == 3) {
+            if (isLeter){
+                OrderTM orderTM = new OrderTM();
+                orderTM.setItemBarcode(item.getItemBarcode());
+                orderTM.setItemName(badge.getDescription());
+                orderTM.setBadgeId(badge.getBadgeId());
+                orderTM.setQuantity(quantity.doubleValue());
+                orderTM.setUnitPrice(Math.round(unitePrice));
+                orderTM.setMilliliter(milliliters);
+                orderTM.setStatus(status);
+                BigDecimal sellingPrice = BigDecimal.valueOf(Math.round(unitePrice));
+                BigDecimal subTotal = sellingPrice.multiply(quantity);
+                orderTM.setSubTotal(subTotal.doubleValue());
+                tblOrder.getItems().add(orderTM);
+            } else {
+                OrderTM orderTM = new OrderTM();
+                orderTM.setItemBarcode(item.getItemBarcode());
+                orderTM.setItemName(badge.getDescription());
+                orderTM.setBadgeId(badge.getBadgeId());
+                orderTM.setQuantity(quantity.doubleValue());
+                orderTM.setUnitPrice(badge.getSellingPrice());
+                orderTM.setMilliliter(milliliters);
+                orderTM.setStatus(status);
+                BigDecimal sellingPrice = BigDecimal.valueOf(badge.getSellingPrice());
+                BigDecimal subTotal = sellingPrice.multiply(quantity);
+                orderTM.setSubTotal(subTotal.doubleValue());
+                tblOrder.getItems().add(orderTM);
+            }
+
+            itemBarcode.clear();
+            setLblTotal();
+            setQuantity();
         }
         setQuantity();
     }

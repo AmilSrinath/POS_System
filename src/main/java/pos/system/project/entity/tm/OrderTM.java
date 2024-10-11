@@ -18,4 +18,6 @@ public class OrderTM {
     private double unitPrice;
     private double subTotal;
     private int badgeId;
+    private double milliliter;
+    private int status; // 1-qb 2-hb 3-b 4-litters
 }
