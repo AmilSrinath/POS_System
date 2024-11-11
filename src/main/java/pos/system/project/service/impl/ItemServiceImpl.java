@@ -14,10 +14,12 @@ import pos.system.project.dto.ItemDTO;
 import pos.system.project.entity.Badge;
 import pos.system.project.entity.Category;
 import pos.system.project.entity.Item;
+import pos.system.project.entity.tm.ItemTM;
 import pos.system.project.service.ItemService;
 import pos.system.project.util.FactoryConfiguration;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -195,4 +197,54 @@ public class ItemServiceImpl implements ItemService {
         session.close();
         return itemList;
     }
+
+    @Override
+    public List<ItemTM> getAll() throws IOException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = null;
+        List<ItemTM> itemListTM = null;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // Use a native query or HQL query to fetch data from Item and Badge tables
+            String hql = "SELECT i, b FROM Item i LEFT JOIN Badge b ON i.itemId = b.item.itemId";
+            Query<Object[]> query = session.createQuery(hql, Object[].class);
+            List<Object[]> results = query.getResultList();
+
+            itemListTM = results.stream().map(result -> {
+                Item item = (Item) result[0];
+                Badge badge = (Badge) result[1];
+
+                // Mapping data to ItemTM object
+                return new ItemTM(
+                        item.getItemId(),
+                        item.getItemBarcode(),
+                        item.getItemName(),
+                        item.getSellByStatus(),
+                        item.getImageUrl(),
+                        item.getCategory(),
+                        badge != null ? badge.getBadgeId() : 0,
+                        badge != null ? badge.getDescription() : null,
+                        badge != null ? badge.getPurchasePrice() : 0,
+                        badge != null ? badge.getSellingPrice() : 0,
+                        badge != null ? badge.getQuantity() : BigDecimal.ZERO,
+                        badge != null ? badge.getExpireDate() : null,
+                        badge != null ? badge.getQuantityType() : 0
+                );
+            }).toList();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new IOException("Failed to fetch data for items and badges", e);
+        } finally {
+            session.close();
+        }
+
+        return itemListTM;
+    }
+
 }

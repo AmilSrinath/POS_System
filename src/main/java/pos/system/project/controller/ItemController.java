@@ -23,6 +23,7 @@ import pos.system.project.dto.ItemDTO;
 import pos.system.project.entity.Badge;
 import pos.system.project.entity.Category;
 import pos.system.project.entity.Item;
+import pos.system.project.entity.tm.ItemTM;
 import pos.system.project.service.BadgeService;
 import pos.system.project.service.CategoryService;
 import pos.system.project.service.ItemService;
@@ -226,6 +227,16 @@ public class ItemController {
         getAllItems();
         getAllBadges();
         iconEdit.setVisible(false);
+        getAll();
+    }
+
+
+    public void getAll() throws IOException {
+        List<ItemTM> itemTMList = itemService.getAll();
+        for (ItemTM itemTM : itemTMList) {
+            System.out.println(itemTM.getItemId());
+            System.out.println(itemTM.getBadgeId());
+        }
     }
 
     @FXML

@@ -450,7 +450,7 @@ public class OrderController {
             itemBarcode.clear();
             setLblTotal();
         } else if (item.getSellByStatus() == 3) {
-            if (isLeter){
+            if (isLeter && milliliters > 0) {
                 OrderTM orderTM = new OrderTM();
                 orderTM.setItemBarcode(item.getItemBarcode());
                 orderTM.setItemName(badge.getDescription());
@@ -463,7 +463,7 @@ public class OrderController {
                 BigDecimal subTotal = sellingPrice.multiply(quantity);
                 orderTM.setSubTotal(subTotal.doubleValue());
                 tblOrder.getItems().add(orderTM);
-            } else {
+            } else if (milliliters > 0) {
                 OrderTM orderTM = new OrderTM();
                 orderTM.setItemBarcode(item.getItemBarcode());
                 orderTM.setItemName(badge.getDescription());

@@ -7,9 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import pos.system.project.controller.HomeController;
-import pos.system.project.controller.UserController;
-import pos.system.project.entity.User;
 import pos.system.project.util.FactoryConfiguration;
 
 import java.io.IOException;

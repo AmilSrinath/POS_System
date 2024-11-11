@@ -246,6 +246,9 @@ public class PopupController {
                             return "Quarter Bottle";
                         } else if (dialogButton == otherButton) {
                             return "Other";
+                        } else if (dialogButton == cancelButton) {
+                            orderController.milliliters = 0;
+                            return null;
                         }
                         return null;
                     });
