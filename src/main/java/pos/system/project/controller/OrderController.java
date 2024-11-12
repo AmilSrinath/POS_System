@@ -1,9 +1,12 @@
 package pos.system.project.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,6 +15,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -34,10 +39,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Amil Srinath
@@ -82,6 +89,7 @@ public class OrderController {
     public boolean isLeter;
     public double milliliters;
     public int status;
+    public AnchorPane orderForm;
 
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
@@ -126,6 +134,23 @@ public class OrderController {
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colSubTotal.setCellValueFactory(new PropertyValueFactory<>("subTotal"));
         colAction.setCellFactory(getDeleteButtonCellFactory());
+
+
+        orderForm.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case F12:
+                    try {
+                        PlaceOrderOnAction(new ActionEvent(event.getSource(), event.getTarget()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                default:
+                    // Handle other key events if needed
+                    break;
+            }
+        });
+
 
         setupAutoSuggestion();
         shortCut();
@@ -277,6 +302,57 @@ public class OrderController {
     }
 
     public void PlaceOrderOnAction(ActionEvent actionEvent) throws IOException {
+        Dialog<String> customDialog = new Dialog<>();
+        customDialog.setTitle("Enter Quantity");
+
+        // Custom label
+        Text label = new Text("Enter Amount:");
+        label.setStyle("-fx-font-size: 20px; -fx-text-fill: #000000;");
+
+        // Text input field
+        TextField inputField = new TextField();
+        inputField.setStyle("-fx-font-size: 20px;");
+
+        VBox vbox = new VBox(label, inputField);
+        vbox.setSpacing(10);
+
+        customDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+        customDialog.getDialogPane().setContent(vbox);
+
+        customDialog.setOnShown(dialogEvent -> Platform.runLater(inputField::requestFocus));
+        customDialog.showAndWait();
+
+        double amount = Double.parseDouble(inputField.getText());
+        double tot = Double.parseDouble(lblTotal.getText());
+
+        double cash = amount-tot;
+
+        //Cash Dialog
+        Dialog<String> cashDialog = new Dialog<>();
+
+        // Create and style the label
+        Label cashLbl = new Label("Cash: " + cash);
+        cashLbl.setStyle("-fx-text-fill: #31ca07; -fx-font-size: 30px; -fx-font-weight: bold;");
+
+        // Create a VBox and add the label
+        VBox vboxCash = new VBox(cashLbl);
+        vboxCash.setSpacing(50);
+        vboxCash.setAlignment(Pos.CENTER); // Center align content inside the VBox
+
+        // Set size of the dialog's content
+        vboxCash.setPrefSize(300, 130); // Width = 300px, Height = 130px
+
+        // Add content to the dialog
+        cashDialog.getDialogPane().setContent(vboxCash);
+        cashDialog.getDialogPane().setPrefSize(350, 150); // Optional: Set size of DialogPane
+        cashDialog.getDialogPane().setContent(vboxCash);
+
+        cashDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+
+        // Show the dialog
+        cashDialog.show();
+        itemBarcode.requestFocus();
+
         List<OrderTM> items = tblOrder.getItems();
 
         if (items.isEmpty()) {
@@ -305,7 +381,6 @@ public class OrderController {
                     orderDetailsDTO.setBadgeId(badge.getBadgeId());
                 }
             }
-
             orderService.saveOrderDetails(orderDetailsDTO);
         }
 
@@ -316,7 +391,6 @@ public class OrderController {
         itemList = itemService.getAllItems();
         badgeList = badgeService.getAllBadges();
 
-        //clear
 //        tblOrder.getItems().clear();
 //        lblTotal.setText("0.00");
     }

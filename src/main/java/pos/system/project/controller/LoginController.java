@@ -41,7 +41,7 @@ public class LoginController {
             controller.setUserID(cusUsername.getText());
 
             stage.setScene(scene);
-            stage.setResizable(false);
+//            stage.setResizable(false);
             stage.show();
             root.getScene().getWindow().hide();
         }else {

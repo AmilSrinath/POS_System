@@ -29,6 +29,7 @@ public class HomeController {
 
     @FXML
     public Label lblUsername;
+    public Button btnOrderHistory;
 
     @FXML
     private Button btnConfiguration;
@@ -205,4 +206,14 @@ public class HomeController {
         lblUsername.setText(user.getUsername());
     }
 
+    @FXML
+    public void btnOrderHistoryOnAction(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/orderHistory.fxml"));
+        AnchorPane anchorPane = loader.load();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+        home.getScene().getWindow().hide();
+    }
 }

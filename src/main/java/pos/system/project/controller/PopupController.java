@@ -214,13 +214,15 @@ public class PopupController {
                     dialog.setTitle("Enter Quantity");
                     dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity());
                     dialog.setContentText("Quantity:");
+                    dialog.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the dialog pane
                 } else if (item.getSellByStatus() == 2) {
                     dialog.setTitle("Enter Quantity");
                     dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() +
                             "\nAvailable Stock: " + badge.getQuantity() + "g"
                     );
                     dialog.setContentText("Quantity:");
-                } else if (item.getSellByStatus() == 3) { //liquid
+                    dialog.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the dialog pane
+                } else if (item.getSellByStatus() == 3) { // Liquid
                     Dialog<String> customDialog = new Dialog<>();
                     customDialog.setTitle("Select Bottle Type");
                     customDialog.setHeaderText("Choose bottle type for Badge ID: " + badge.getBadgeId() +
@@ -235,6 +237,7 @@ public class PopupController {
                     ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                     customDialog.getDialogPane().getButtonTypes().addAll(bottleButton, halfBottleButton, quarterBottleButton, otherButton, cancelButton);
+                    customDialog.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the custom dialog pane
 
                     // Handle button clicks
                     customDialog.setResultConverter(dialogButton -> {
@@ -276,6 +279,7 @@ public class PopupController {
                                     "\nAvailable Stock: " + badge.getQuantity() + " ml"
                             );
                             customDialog2.setContentText("Quantity(litres):");
+                            customDialog2.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the dialog pane
                             Optional<String> result2 = customDialog2.showAndWait();
                             result2.ifPresent(quantity -> {
                                 orderController.isLeter = true;
@@ -291,7 +295,7 @@ public class PopupController {
             }
         }
 
-        dialog.getDialogPane().lookup(".text-field").setStyle("-fx-font-size: 18px;");
+        dialog.getDialogPane().lookup(".text-field").setStyle("-fx-font-size: 18px;"); // Apply font size to the text field
 
         // Show dialog and capture result
         Optional<String> result = dialog.showAndWait();

@@ -24,10 +24,13 @@ public class Order {
     private int orderId;
     private Date createDate;
     private double total;
+    private double amountPaid;
+    private double balance;
 
     @ManyToOne
     @JoinColumn(name = "cusId")
     private Customer customer;
+    private String customerName;
 
     @ManyToOne
     @JoinColumn(name = "userId")

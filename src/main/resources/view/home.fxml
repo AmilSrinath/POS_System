@@ -21,7 +21,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnReports" contentDisplay="TOP" layoutX="1395.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnReportsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Reports" textFill="WHITE">
+      <Button fx:id="btnReports" contentDisplay="TOP" layoutX="1074.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnReportsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Reports" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -108,7 +108,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnSettings" contentDisplay="TOP" layoutX="1074.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnSettingsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Settings" textFill="WHITE">
+      <Button fx:id="btnSettings" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnSettingsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Settings" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -156,7 +156,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnConfiguration" contentDisplay="TOP" layoutX="752.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnConfigurationOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Configuration" textFill="WHITE">
+      <Button fx:id="btnConfiguration" contentDisplay="TOP" layoutX="1395.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnConfigurationOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Configuration" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -168,7 +168,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnCategory" contentDisplay="TOP" layoutX="137.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnCategoryOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Category" textFill="WHITE">
+      <Button fx:id="btnCategory" contentDisplay="TOP" layoutX="435.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnCategoryOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Category" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -180,11 +180,23 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="435.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Log Out" textFill="WHITE">
+      <Button fx:id="btnLogOut" contentDisplay="TOP" layoutX="752.0" layoutY="638.0" mnemonicParsing="false" onAction="#btnLogOutOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Log Out" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../assest/icon/icons8-logout-100.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="17.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnOrderHistory" contentDisplay="TOP" layoutX="752.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnOrderHistoryOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Order History" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-history-folder-100.png" />
                </image>
             </ImageView>
          </graphic>
