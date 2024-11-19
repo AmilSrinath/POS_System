@@ -39,5 +39,10 @@
             <Font size="17.0" />
          </font>
       </TextField>
+      <Label layoutX="288.0" layoutY="413.0" onMouseClicked="#lblFogotPasswordOnMouseClicked" text="Fogot Password" textFill="#0014ff">
+         <font>
+            <Font name="Poppins Regular" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

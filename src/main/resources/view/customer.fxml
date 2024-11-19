@@ -67,7 +67,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <Text layoutX="643.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Phone 1">
+      <Text layoutX="643.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Phone">
          <font>
             <Font name="Poppins Regular" size="17.0" />
          </font>
@@ -77,12 +77,7 @@
             <Font size="17.0" />
          </font>
       </TextField>
-      <TextField fx:id="cusPhone1" layoutX="820.0" layoutY="171.0" prefHeight="33.0" prefWidth="271.0">
-         <font>
-            <Font size="17.0" />
-         </font>
-      </TextField>
-      <TextField fx:id="cusPhone2" layoutX="820.0" layoutY="224.0" prefHeight="33.0" prefWidth="271.0">
+      <TextField fx:id="cusPhone" layoutX="820.0" layoutY="171.0" prefHeight="33.0" prefWidth="271.0">
          <font>
             <Font size="17.0" />
          </font>
@@ -98,11 +93,6 @@
          </font>
       </TextField>
       <DatePicker fx:id="cusDOB" layoutX="820.0" layoutY="275.0" prefHeight="32.0" prefWidth="271.0" style="-fx-font-size: 17;" />
-      <Text layoutX="643.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Phone 2">
-         <font>
-            <Font name="Poppins Regular" size="17.0" />
-         </font>
-      </Text>
       <Button layoutX="1370.0" layoutY="143.0" mnemonicParsing="false" onAction="#AddOnAction" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #38b000;" text="Add">
          <font>
             <Font name="Poppins Regular" size="18.0" />
@@ -120,12 +110,11 @@
       </Button>
       <TableView fx:id="tblCustomer" layoutX="117.0" layoutY="490.0" onMouseClicked="#tableOnMouseClicked" prefHeight="471.0" prefWidth="1442.0" style="-fx-font-size: 16;">
         <columns>
-          <TableColumn fx:id="colCusName" prefWidth="227.0" text="Customer Name" />
-            <TableColumn fx:id="colCusAddress" prefWidth="321.0" text="Customer Address" />
-            <TableColumn fx:id="colCusNIC" prefWidth="217.0" text="NIC" />
-            <TableColumn fx:id="colCusPhone1" prefWidth="222.0" text="Phone 1" />
-            <TableColumn fx:id="colCusPhone2" prefWidth="227.0" text="Phone 2" />
-            <TableColumn fx:id="colCusDOB" prefWidth="226.0" text="Date Of Birth" />
+          <TableColumn fx:id="colCusName" prefWidth="264.0" text="Customer Name" />
+            <TableColumn fx:id="colCusAddress" prefWidth="343.0" text="Customer Address" />
+            <TableColumn fx:id="colCusNIC" prefWidth="281.0" text="NIC" />
+            <TableColumn fx:id="colCusPhone" prefWidth="273.0" text="Phone" />
+            <TableColumn fx:id="colCusDOB" prefWidth="279.0" text="Date Of Birth" />
         </columns>
       </TableView>
       <Text layoutX="117.0" layoutY="340.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NIC">

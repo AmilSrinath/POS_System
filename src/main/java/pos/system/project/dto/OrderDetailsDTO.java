@@ -18,6 +18,7 @@ public class OrderDetailsDTO {
     private double subTotal;
     private double itemPrice;
     private int badgeId;
+    private String itemType;
     private Order order;
     private Item item;
     private User user;

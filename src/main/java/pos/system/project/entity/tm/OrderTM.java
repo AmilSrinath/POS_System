@@ -15,6 +15,7 @@ public class OrderTM {
     private String itemBarcode;
     private String itemName;
     private double quantity;
+    private String type;
     private double unitPrice;
     private double subTotal;
     private int badgeId;

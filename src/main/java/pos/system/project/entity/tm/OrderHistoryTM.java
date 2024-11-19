@@ -17,4 +17,5 @@ public class OrderHistoryTM {
     private String date;
     private String total;
     private String userID;
+    private String paid;
 }

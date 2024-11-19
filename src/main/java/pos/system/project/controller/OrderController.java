@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -20,31 +19,20 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import pos.system.project.dto.CustomerDTO;
 import pos.system.project.dto.OrderDTO;
 import pos.system.project.dto.OrderDetailsDTO;
 import pos.system.project.entity.*;
 import pos.system.project.entity.tm.OrderTM;
-import pos.system.project.service.BadgeService;
-import pos.system.project.service.ItemService;
-import pos.system.project.service.OrderService;
-import pos.system.project.service.ShortCutService;
-import pos.system.project.service.impl.BadgeServiceImpl;
-import pos.system.project.service.impl.ItemServiceImpl;
-import pos.system.project.service.impl.OrderServiceImpl;
-import pos.system.project.service.impl.ShortCutServiceImpl;
+import pos.system.project.service.*;
+import pos.system.project.service.impl.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Amil Srinath
@@ -89,12 +77,15 @@ public class OrderController {
     public boolean isLeter;
     public double milliliters;
     public int status;
+    public String type;
     public AnchorPane orderForm;
 
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
     ShortCutService shortCutService = new ShortCutServiceImpl();
     OrderService orderService = new OrderServiceImpl();
+    CustomerService customerService = new CustomerSerivceImpl();
+    CustomerLoanService customerLoanService = new CustomerLoanServiceImpl();
 
     public static List<Item> itemList;
     public static List<Badge> badgeList;
@@ -108,6 +99,8 @@ public class OrderController {
     @FXML
     private TableColumn<?, ?> colQuantity;
     @FXML
+    public TableColumn<?, ?> colType;
+    @FXML
     private TableColumn<?, ?> colSubTotal;
     @FXML
     private TableColumn<?, ?> colUnitPrice;
@@ -117,6 +110,9 @@ public class OrderController {
     public Button btnBack;
     @FXML
     public Label lblTotal;
+
+    TextField txtMobileNumber = new TextField();
+    Label lblCustomerName = new Label();
 
     private ContextMenu suggestionMenu;
 
@@ -131,10 +127,10 @@ public class OrderController {
         colBarcode.setCellValueFactory(new PropertyValueFactory<>("itemBarcode"));
         colItemName.setCellValueFactory(new PropertyValueFactory<>("itemName"));
         colQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colUnitPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
         colSubTotal.setCellValueFactory(new PropertyValueFactory<>("subTotal"));
         colAction.setCellFactory(getDeleteButtonCellFactory());
-
 
         orderForm.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -151,11 +147,12 @@ public class OrderController {
             }
         });
 
-
         setupAutoSuggestion();
         shortCut();
         setImageForShortCuts();
     }
+
+    Customer customerByMobileNumber = null;
 
     private void setImageForShortCuts() throws IOException {
         List<ShortCut> shortCuts = shortCutService.getAllShortCuts();
@@ -322,35 +319,167 @@ public class OrderController {
         customDialog.setOnShown(dialogEvent -> Platform.runLater(inputField::requestFocus));
         customDialog.showAndWait();
 
-        double amount = Double.parseDouble(inputField.getText());
-        double tot = Double.parseDouble(lblTotal.getText());
+        double cash = 0.0;
+        double amount = 0.0;
+        boolean isPaid = false;
 
-        double cash = amount-tot;
+        if (inputField.getText().isEmpty()) {
+            //Todo add or update customer
 
-        //Cash Dialog
-        Dialog<String> cashDialog = new Dialog<>();
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mobileNumberEnter.fxml"));
+//            AnchorPane popupRoot = loader.load();
+//            MobileNumberEnterController mobileNumberEnterController = loader.getController();
+//            mobileNumberEnterController.setTotalAmount(lblTotal.getText());
+//            Stage stage = new Stage();
+//            stage.setScene(new Scene(popupRoot));
+//            stage.initModality(Modality.APPLICATION_MODAL);
+//            stage.show();
 
-        // Create and style the label
-        Label cashLbl = new Label("Cash: " + cash);
-        cashLbl.setStyle("-fx-text-fill: #31ca07; -fx-font-size: 30px; -fx-font-weight: bold;");
 
-        // Create a VBox and add the label
-        VBox vboxCash = new VBox(cashLbl);
-        vboxCash.setSpacing(50);
-        vboxCash.setAlignment(Pos.CENTER); // Center align content inside the VBox
+            Dialog<String> mobileNumberDialog = new Dialog<>();
 
-        // Set size of the dialog's content
-        vboxCash.setPrefSize(300, 130); // Width = 300px, Height = 130px
+// Create a TextField for mobile number input with inline CSS for font size
+            TextField txtMobileNumber = new TextField();
+            txtMobileNumber.setPromptText("Enter Mobile Number");
+            txtMobileNumber.setStyle("-fx-font-size: 22px;"); // Set font size to 22px
 
-        // Add content to the dialog
-        cashDialog.getDialogPane().setContent(vboxCash);
-        cashDialog.getDialogPane().setPrefSize(350, 150); // Optional: Set size of DialogPane
-        cashDialog.getDialogPane().setContent(vboxCash);
+// Create a Label for displaying customer information (optional) with inline CSS for font size
+            Label lblCustomerName = new Label();
+            lblCustomerName.setStyle("-fx-font-size: 22px;"); // Set font size to 22px
+            lblCustomerName.setText(""); // Initially empty, you can populate this based on input
 
-        cashDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+// Create a VBox to arrange TextField and Label
+            Label lblCustomerMobileNumber = new Label("Customer Mobile Number:");
+            lblCustomerMobileNumber.setStyle("-fx-font-size: 22px;"); // Set font size to 22px
 
-        // Show the dialog
-        cashDialog.show();
+            VBox vboxContent = new VBox(10); // spacing of 10 between elements
+            vboxContent.setAlignment(Pos.CENTER);
+            vboxContent.getChildren().addAll(lblCustomerMobileNumber, txtMobileNumber, lblCustomerName);
+
+// Set the VBox as the content of the dialog
+            mobileNumberDialog.getDialogPane().setContent(vboxContent);
+
+// Add buttons to the dialog
+            ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+            mobileNumberDialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+
+            txtMobileNumber.setOnKeyReleased(event -> {
+                try {
+                    Customer customerByMobileNumber1 = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
+                    if (customerByMobileNumber1 != null) {
+                        if (customerByMobileNumber1.getCusName() != null){
+                            lblCustomerName.setText(customerByMobileNumber1.getCusName());
+                            lblCustomerName.setStyle("-fx-text-fill: red; -fx-font-size: 23px;");
+                        }else {
+                            lblCustomerName.setText("No Name");
+                        }
+                    }else {
+                        lblCustomerName.setText("");
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+// Request focus for the text field
+            Platform.runLater(() -> txtMobileNumber.requestFocus());
+
+// Handle the input when the OK button is pressed
+            mobileNumberDialog.setResultConverter(dialogButton -> {
+                if (dialogButton == okButtonType) {
+                    // Todo add or update customer
+                    Customer customer = null;
+                    try {
+                        customer = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    CustomerLoan customerLoan = new CustomerLoan();
+                    customerLoan.setLoanAmount(Double.parseDouble(lblTotal.getText()));
+                    customerLoan.setStatus(1);
+                    try {
+                        customerByMobileNumber = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    if (customer != null) {
+                        // Todo add customerLoan row
+                        customerLoan.setCustomer(customer);
+                        customerLoan.setCusMobileNumber(txtMobileNumber.getText());
+                        customerLoan.setCusName(customer.getCusName());
+                        try {
+                            customerLoanService.saveLoan(customerLoan);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        // Todo add customer and customerLoan
+                        CustomerDTO customerDTO = new CustomerDTO();
+                        customerDTO.setCusPhone(txtMobileNumber.getText());
+                        try {
+                            customerByMobileNumber = customerService.Add(customerDTO);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            customerLoan.setCustomer(customerService.getCustomerByMobileNumber(txtMobileNumber.getText()));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            customerLoanService.saveLoan(customerLoan);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    // Optionally, you can perform any logic you need here
+                    String enteredMobileNumber = txtMobileNumber.getText();
+                    if (!enteredMobileNumber.isEmpty()) {
+                        // Process the entered mobile number (e.g., update a label)
+                        lblCustomerName.setText("Mobile Number Entered: " + enteredMobileNumber);
+                        return enteredMobileNumber;
+                    }
+                }
+                return null;
+            });
+
+// Show the dialog and wait for response
+            mobileNumberDialog.showAndWait();
+
+
+        }else {
+            amount = Double.parseDouble(inputField.getText());
+            double tot = Double.parseDouble(lblTotal.getText());
+            cash = amount-tot;
+            isPaid = true;
+
+            //Cash Dialog
+            Dialog<String> cashDialog = new Dialog<>();
+
+            // Create and style the label
+            Label cashLbl = new Label("Cash: " + cash);
+            cashLbl.setStyle("-fx-text-fill: #31ca07; -fx-font-size: 30px; -fx-font-weight: bold;");
+
+            // Create a VBox and add the label
+            VBox vboxCash = new VBox(cashLbl);
+            vboxCash.setSpacing(50);
+            vboxCash.setAlignment(Pos.CENTER); // Center align content inside the VBox
+
+            // Set size of the dialog's content
+            vboxCash.setPrefSize(300, 130); // Width = 300px, Height = 130px
+
+            // Add content to the dialog
+            cashDialog.getDialogPane().setContent(vboxCash);
+            cashDialog.getDialogPane().setPrefSize(350, 150); // Optional: Set size of DialogPane
+            cashDialog.getDialogPane().setContent(vboxCash);
+
+            cashDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
+
+            // Show the dialog
+            cashDialog.show();
+        }
         itemBarcode.requestFocus();
 
         List<OrderTM> items = tblOrder.getItems();
@@ -360,10 +489,22 @@ public class OrderController {
             return;
         }
 
+
         OrderDTO order = new OrderDTO();
         order.setTotal(Double.parseDouble(lblTotal.getText()));
+        order.setAmountPaid(amount);
+        order.setBalance(cash);
         order.setUser(HomeController.user);
-        order.setCustomer(null);
+        order.setCustomer(customerByMobileNumber);
+        order.setCustomerName(customerByMobileNumber.getCusName());
+
+        System.out.println("Cussss : "+customerByMobileNumber);
+
+        if (isPaid) {
+            order.setIsPaid(1);
+        } else {
+            order.setIsPaid(0);
+        }
 
         Order saveOrder = orderService.saveOrder(order);
 
@@ -379,6 +520,7 @@ public class OrderController {
                     orderDetailsDTO.setSubTotal(item.getSubTotal());
                     orderDetailsDTO.setItemPrice(item.getUnitPrice());
                     orderDetailsDTO.setBadgeId(badge.getBadgeId());
+                    orderDetailsDTO.setItemType(item.getType());
                 }
             }
             orderService.saveOrderDetails(orderDetailsDTO);
@@ -468,6 +610,7 @@ public class OrderController {
                     qtyBigDecimal = qtyBigDecimal.add(quantity);
                     orderTM.setQuantity(qtyBigDecimal.doubleValue());
                     orderTM.setBadgeId(badge.getBadgeId());
+                    orderTM.setType("unit");
                     orderTM.setSubTotal(badge.getSellingPrice()*qtyBigDecimal.doubleValue());
                     tblOrder.refresh();
                     itemBarcode.clear();
@@ -482,6 +625,7 @@ public class OrderController {
             orderTM.setItemName(badge.getDescription());
             orderTM.setBadgeId(badge.getBadgeId());
             orderTM.setQuantity(quantity.doubleValue());
+            orderTM.setType("unit");
             orderTM.setUnitPrice(badge.getSellingPrice());
             BigDecimal sellingPrice = BigDecimal.valueOf(badge.getSellingPrice());
             BigDecimal subTotal = sellingPrice.multiply(quantity);
@@ -499,7 +643,7 @@ public class OrderController {
                     BigDecimal totalQuantity = currentQtyBigDecimal.add(quantity);
                     BigDecimal quantity = totalQuantity.divide(BigDecimal.valueOf(1000));
                     orderTM.setQuantity(totalQuantity.doubleValue());
-
+                    orderTM.setType("g");
                     orderTM.setSubTotal(badge.getSellingPrice() * quantity.doubleValue());
                     tblOrder.refresh();
                     itemBarcode.clear();
@@ -512,6 +656,7 @@ public class OrderController {
             OrderTM orderTM = new OrderTM();
             orderTM.setItemBarcode(item.getItemBarcode());
             orderTM.setItemName(badge.getDescription());
+            orderTM.setType("g");
             orderTM.setQuantity(quantity.doubleValue());
             orderTM.setUnitPrice(badge.getSellingPrice());
             orderTM.setBadgeId(badge.getBadgeId());
@@ -525,25 +670,29 @@ public class OrderController {
             setLblTotal();
         } else if (item.getSellByStatus() == 3) {
             if (isLeter && milliliters > 0) {
+                System.out.println("AAAAAAA");
                 OrderTM orderTM = new OrderTM();
                 orderTM.setItemBarcode(item.getItemBarcode());
                 orderTM.setItemName(badge.getDescription());
                 orderTM.setBadgeId(badge.getBadgeId());
                 orderTM.setQuantity(quantity.doubleValue());
-                orderTM.setUnitPrice(Math.round(unitePrice));
+                orderTM.setUnitPrice(badge.getSellingPriceLiter());
                 orderTM.setMilliliter(milliliters);
                 orderTM.setStatus(status);
-                BigDecimal sellingPrice = BigDecimal.valueOf(Math.round(unitePrice));
+                orderTM.setType(type);
+                BigDecimal sellingPrice = BigDecimal.valueOf(Math.round(badge.getSellingPriceLiter()));
                 BigDecimal subTotal = sellingPrice.multiply(quantity);
                 orderTM.setSubTotal(subTotal.doubleValue());
                 tblOrder.getItems().add(orderTM);
             } else if (milliliters > 0) {
+                System.out.println("BBBBBBBB");
                 OrderTM orderTM = new OrderTM();
                 orderTM.setItemBarcode(item.getItemBarcode());
                 orderTM.setItemName(badge.getDescription());
                 orderTM.setBadgeId(badge.getBadgeId());
                 orderTM.setQuantity(quantity.doubleValue());
                 orderTM.setUnitPrice(badge.getSellingPrice());
+                orderTM.setType(type);
                 orderTM.setMilliliter(milliliters);
                 orderTM.setStatus(status);
                 BigDecimal sellingPrice = BigDecimal.valueOf(badge.getSellingPrice());
@@ -716,5 +865,4 @@ public class OrderController {
         shortCutID = 8;
         showShortCutDialog();
     }
-
 }

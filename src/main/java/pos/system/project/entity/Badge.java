@@ -22,6 +22,8 @@ public class Badge {
     private String description;
     private double purchasePrice;
     private double sellingPrice;
+    private double purchasePriceLiter;
+    private double sellingPriceLiter;
     private BigDecimal quantity;
     private String expireDate;
     private int status;

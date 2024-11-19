@@ -24,6 +24,7 @@ public class FactoryConfiguration {
         configuration.addAnnotatedClass(Category.class);
         configuration.addAnnotatedClass(Badge.class);
         configuration.addAnnotatedClass(ShortCut.class);
+        configuration.addAnnotatedClass(CustomerLoan.class);
         sessionFactory = configuration.buildSessionFactory();
     }
 

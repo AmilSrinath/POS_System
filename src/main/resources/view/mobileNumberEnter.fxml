@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="moblieNumberEnterForm" prefHeight="252.0" prefWidth="556.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.MobileNumberEnterController">
+   <children>
+      <TextField fx:id="txtMobileNumber" layoutX="124.0" layoutY="101.0" prefHeight="39.0" prefWidth="309.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <Label layoutX="150.0" layoutY="59.0" text="Customer Mobile Number">
+         <font>
+            <Font name="Poppins Regular" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblCustomerName" alignment="CENTER" layoutX="26.0" layoutY="173.0" prefHeight="28.0" prefWidth="505.0">
+         <font>
+            <Font name="Poppins Regular" size="20.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

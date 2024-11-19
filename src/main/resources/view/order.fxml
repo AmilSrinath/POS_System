@@ -15,9 +15,9 @@
 
 <AnchorPane fx:id="orderForm" prefHeight="1024.0" prefWidth="1680.0" style="-fx-background-color: #fff;" styleClass="root" stylesheets="@../Styles/CSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.OrderController">
    <children>
-      <TextField fx:id="itemBarcode" layoutX="260.0" layoutY="192.0" onAction="#itemBarcodeOnAction" prefHeight="33.0" prefWidth="1344.0">
+      <TextField fx:id="itemBarcode" layoutX="257.0" layoutY="187.0" onAction="#itemBarcodeOnAction" prefHeight="33.0" prefWidth="1344.0">
          <font>
-            <Font size="17.0" />
+            <Font size="20.0" />
          </font>
       </TextField>
       <AnchorPane prefHeight="102.0" prefWidth="1681.0" styleClass="home-top-bar">
@@ -66,9 +66,10 @@
           <TableColumn fx:id="colItemName" prefWidth="411.0" styleClass="table-view" text="Item Name" />
           <TableColumn fx:id="colBarcode" prefWidth="274.0" styleClass="table-view" text="Barcode" />
             <TableColumn fx:id="colUnitPrice" prefWidth="262.0" styleClass="table-view" text="Unit Price" />
-            <TableColumn fx:id="colQuantity" prefWidth="235.0" styleClass="table-view" text="Quantity" />
-            <TableColumn fx:id="colSubTotal" prefWidth="247.0" styleClass="table-view" text="SubTotal" />
-            <TableColumn fx:id="colAction" prefWidth="102.0" styleClass="table-view" text="Action" />
+            <TableColumn fx:id="colQuantity" prefWidth="188.0" styleClass="table-view" text="Quantity" />
+            <TableColumn fx:id="colType" prefWidth="85.0" styleClass="table-view" text="Type" />
+            <TableColumn fx:id="colSubTotal" prefWidth="217.0" styleClass="table-view" text="SubTotal" />
+            <TableColumn fx:id="colAction" prefWidth="94.0" styleClass="table-view" text="Action" />
         </columns>
       </TableView>
       <Text fill="#168aad" layoutX="72.0" layoutY="214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Item Barcode">

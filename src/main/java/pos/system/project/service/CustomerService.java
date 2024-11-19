@@ -10,8 +10,9 @@ import java.util.List;
  * @author Amil Srinath
  */
 public interface CustomerService {
-    int Add(CustomerDTO customerDTO) throws IOException;
+    Customer Add(CustomerDTO customerDTO) throws IOException;
     void Edit(CustomerDTO customerDTO, int currentSelectedId) throws IOException;
     void Delete(int currentSelectedId) throws IOException;
     List<Customer> getAllCustomers() throws IOException;
+    Customer getCustomerByMobileNumber(String mobileNumber) throws IOException;
 }

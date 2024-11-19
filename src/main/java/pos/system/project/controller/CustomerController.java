@@ -19,6 +19,7 @@ import pos.system.project.service.CustomerService;
 import pos.system.project.service.impl.CustomerSerivceImpl;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -39,9 +40,7 @@ public class CustomerController {
     @FXML
     public TableColumn<?, ?> colCusName;
     @FXML
-    public TableColumn<?, ?> colCusPhone1;
-    @FXML
-    public TableColumn<?, ?> colCusPhone2;
+    public TableColumn<?, ?> colCusPhone;
     @FXML
     public TableColumn<?, ?> colCusAddress;
     @FXML
@@ -55,9 +54,7 @@ public class CustomerController {
     @FXML
     public TextField cusName;
     @FXML
-    public TextField cusPhone1;
-    @FXML
-    public TextField cusPhone2;
+    public TextField cusPhone;
     @FXML
     public TextArea cusAddress;
     @FXML
@@ -91,26 +88,28 @@ public class CustomerController {
     }
 
     public void AddOnAction(ActionEvent actionEvent) throws IOException {
+        for(Customer customer : customerList){
+            if(customer.getCusPhone().equals(cusPhone.getText())){
+                new Alert(Alert.AlertType.ERROR, "Duplicated Phone...!").show();
+                return;
+            }
+
+            if(customer.getNic().equals(cusNIC.getText())){
+                new Alert(Alert.AlertType.ERROR, "Duplicated NIC...!").show();
+                return;
+            }
+        }
+
         try {
-            int status = customerService.Add(
+             customerService.Add(
                     new CustomerDTO(
                             cusName.getText(),
-                            cusPhone1.getText(),
-                            cusPhone2.getText(),
+                            cusPhone.getText(),
                             cusAddress.getText(),
                             cusNIC.getText(),
-                            cusDOB.getValue().toString()
+                            cusDOB.getValue()
                     )
             );
-
-            if(status == 0){
-                new Alert(Alert.AlertType.CONFIRMATION, "Success...!").show();
-                ClearOnAction(actionEvent);
-            }else if(status == 1){
-                new Alert(Alert.AlertType.ERROR, "Duplicated Entry...!").show();
-            } else if(status == 2) {
-                new Alert(Alert.AlertType.ERROR, "Failed...!").show();
-            }
             getAllCustomers();
         }catch(ConstraintViolationException e){
             new Alert(Alert.AlertType.ERROR, "Duplicated Entry...!").show();
@@ -127,17 +126,20 @@ public class CustomerController {
         ButtonType no = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
         Optional<ButtonType> result = new Alert(Alert.AlertType.INFORMATION, "Are you sure to edit?", yes, no).showAndWait();
 
-        if (result.orElse(no) == yes) {
-            customerService.Edit(
-                    new CustomerDTO(
-                            cusName.getText(),
-                            cusPhone1.getText(),
-                            cusPhone2.getText(),
-                            cusAddress.getText(),
-                            cusNIC.getText(),
-                            cusDOB.getValue().toString()
-                    ), currentSelectedId
-            );
+        try {
+            if (result.orElse(no) == yes) {
+                customerService.Edit(
+                        new CustomerDTO(
+                                cusName.getText(),
+                                cusPhone.getText(),
+                                cusAddress.getText(),
+                                cusNIC.getText(),
+                                cusDOB.getValue()
+                        ), currentSelectedId
+                );
+            }
+        }catch (Exception e){
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
         ClearOnAction(actionEvent);
         getAllCustomers();
@@ -174,31 +176,34 @@ public class CustomerController {
         tblCustomer.setItems(observableList);
 
         colCusName.setCellValueFactory(new PropertyValueFactory<>("cusName"));
-        colCusPhone1.setCellValueFactory(new PropertyValueFactory<>("cusPhoneOne"));
-        colCusPhone2.setCellValueFactory(new PropertyValueFactory<>("cusPhoneTwo"));
+        colCusPhone.setCellValueFactory(new PropertyValueFactory<>("cusPhone"));
         colCusAddress.setCellValueFactory(new PropertyValueFactory<>("cusAddress"));
         colCusNIC.setCellValueFactory(new PropertyValueFactory<>("nic"));
         colCusDOB.setCellValueFactory(new PropertyValueFactory<>("dob"));
     }
 
     @FXML
-    public void tableOnMouseClicked(MouseEvent mouseEvent) {
+    public void tableOnMouseClicked(MouseEvent mouseEvent) throws IOException {
         if (mouseEvent.getClickCount() == 2) {
             Customer customer = tblCustomer.getSelectionModel().getSelectedItem();
-            cusName.setText(customer.getCusName());
-            cusPhone1.setText(customer.getCusPhoneOne());
-            cusPhone2.setText(customer.getCusPhoneTwo());
-            cusAddress.setText(customer.getCusAddress());
-            cusNIC.setText(customer.getNic());
-            cusDOB.setValue(LocalDate.parse(customer.getDob()));
-            currentSelectedId = customer.getCusId();
+            Customer customerByMobileNumber = customerService.getCustomerByMobileNumber(customer.getCusPhone());
+
+            cusName.setText(customerByMobileNumber.getCusName());
+            cusPhone.setText(customerByMobileNumber.getCusPhone());
+            cusAddress.setText(customerByMobileNumber.getCusAddress());
+            cusNIC.setText(customerByMobileNumber.getNic());
+
+            try {
+                cusDOB.setValue(customerByMobileNumber.getDob());
+            }catch (Exception e){}
+            currentSelectedId = customerByMobileNumber.getCusId();
+            System.out.println(customerByMobileNumber.getCusId());
         }
     }
 
     public void ClearOnAction(ActionEvent actionEvent) {
         cusName.clear();
-        cusPhone1.clear();
-        cusPhone2.clear();
+        cusPhone.clear();
         cusAddress.clear();
         cusNIC.clear();
         cusDOB.setValue(null);

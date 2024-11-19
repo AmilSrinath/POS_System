@@ -43,6 +43,8 @@ import java.util.Optional;
  * @author Amil Srinath
  */
 public class ItemController {
+    public TextField itemPurchasePriceLiter;
+    public TextField itemSellingPriceLiter;
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
     CategoryService categoryService = new CategoryServiceImpl();
@@ -182,23 +184,32 @@ public class ItemController {
         cmbQuantityType.getItems().addAll("ml", "kg","g","l");
         cmbQuantityType.getSelectionModel().select(0);
 
+        itemPurchasePriceLiter.setVisible(false);
+        itemSellingPriceLiter.setVisible(false);
+
         cmbSellBy.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("Unit")) {
                 lblQuantity.setText("Quantity");
                 lblPurchasePrice.setText("Purchase Price(unit)");
                 lblSellingPrice.setText("Selling Price(unit)");
                 cmbQuantityType.setVisible(false);
+                itemPurchasePriceLiter.setVisible(false);
+                itemSellingPriceLiter.setVisible(false);
             } else if (newValue.equals("Fraction")) {
                 lblQuantity.setText("Quantity(Kg)");
                 lblPurchasePrice.setText("Purchase Price(1Kg)");
                 lblSellingPrice.setText("Selling Price(1Kg)");
                 cmbQuantityType.setVisible(false);
+                itemPurchasePriceLiter.setVisible(false);
+                itemSellingPriceLiter.setVisible(false);
             } else if (newValue.equals("Liquid")) {
                 lblQuantity.setText("Quantity(ml)");
                 lblPurchasePrice.setText("Purchase Price(187.5ml)");
                 lblSellingPrice.setText("Selling Price(187.5ml)");
                 cmbQuantityType.setVisible(true);
                 cmbQuantityType.getSelectionModel().select(0);
+                itemPurchasePriceLiter.setVisible(true);
+                itemSellingPriceLiter.setVisible(true);
             }
         });
 
@@ -325,6 +336,8 @@ public class ItemController {
                                     itemDescription.getText(),
                                     Double.parseDouble(itemPurchasePrice.getText()),
                                     Double.parseDouble(itemSellingPrice.getText()),
+                                    Double.parseDouble(itemPurchasePriceLiter.getText()),
+                                    Double.parseDouble(itemSellingPriceLiter.getText()),
                                     quantity,
                                     itemExpireDate.getValue().toString(),
                                     1,
@@ -343,6 +356,17 @@ public class ItemController {
             }
         }
 
+        double sellPriceLiter = 0.0;
+        double purchasePriceLiter = 0.0;
+
+        try {
+            sellPriceLiter = Double.parseDouble(itemSellingPriceLiter.getText());
+            purchasePriceLiter = Double.parseDouble(itemPurchasePriceLiter.getText());
+        } catch (NumberFormatException e) {
+            sellPriceLiter = 0.0;
+            purchasePriceLiter = 0.0;
+        }
+
         itemService.addItem(
                 new ItemDTO(
                         itemName.getText(),
@@ -355,6 +379,8 @@ public class ItemController {
                         itemDescription.getText(),
                         Double.parseDouble(itemPurchasePrice.getText()),
                         Double.parseDouble(itemSellingPrice.getText()),
+                        purchasePriceLiter,
+                        sellPriceLiter,
                         quantity,
                         itemExpireDate.getValue().toString(),
                         quantityType
@@ -438,6 +464,8 @@ public class ItemController {
                 itemDescription.getText(),
                 Double.parseDouble(itemPurchasePrice.getText()),
                 Double.parseDouble(itemSellingPrice.getText()),
+                Double.parseDouble(itemPurchasePriceLiter.getText()),
+                Double.parseDouble(itemSellingPriceLiter.getText()),
                 quantity,
                 itemExpireDate.getValue().toString(),
                 quantityType
@@ -505,13 +533,15 @@ public class ItemController {
             itemBarcode.setText(badge.getItem().getItemBarcode());
             itemPurchasePrice.setText(String.valueOf(badge.getPurchasePrice()));
             itemSellingPrice.setText(String.valueOf(badge.getSellingPrice()));
+            itemSellingPriceLiter.setText(String.valueOf(badge.getSellingPriceLiter()));
+            itemPurchasePriceLiter.setText(String.valueOf(badge.getPurchasePriceLiter()));
 
             double qty = badge.getQuantity().doubleValue();
 
             if (badge.getItem().getSellByStatus() == 1) {
                 itemQty.setText(String.valueOf(qty));
             } else if (badge.getItem().getSellByStatus() == 2) {
-                itemQty.setText(String.valueOf(qty));
+                itemQty.setText(String.valueOf(qty / 1000));
             } else if (badge.getItem().getSellByStatus() == 3) {
                 if (badge.getQuantityType() == 1) {
                     itemQty.setText(String.valueOf(qty));
@@ -606,8 +636,8 @@ public class ItemController {
 
     @FXML
     public void cmbCategoryOnMouseClicked(MouseEvent mouseEvent) throws IOException {
-        getAllCategories();
         cmbCategory.getSelectionModel().clearSelection();
+        getAllCategories();
     }
 
     @FXML
@@ -750,6 +780,9 @@ public class ItemController {
                 cmbCategory.getItems().add(category.getName());
             }
         }
+
+        //cmbCategory refresh
+        cmbCategory.getSelectionModel().select(0);
     }
 
     @FXML

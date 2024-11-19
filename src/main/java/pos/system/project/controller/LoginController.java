@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import pos.system.project.service.UserService;
@@ -47,5 +48,10 @@ public class LoginController {
         }else {
             new Alert(Alert.AlertType.ERROR, "Invalid Username or Password").show();
         }
+    }
+
+    @FXML
+    public void lblFogotPasswordOnMouseClicked(MouseEvent mouseEvent) {
+
     }
 }

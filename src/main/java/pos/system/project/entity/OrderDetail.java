@@ -24,6 +24,7 @@ public class OrderDetail {
     private double subTotal;
     private double itemPrice;
     private Date createdDate = new Date();
+    private String itemType;
 
     @ManyToOne
     @JoinColumn(name = "orderId")

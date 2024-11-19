@@ -71,6 +71,8 @@ public class ItemServiceImpl implements ItemService {
                     badgeDTO.getDescription(),
                     badgeDTO.getPurchasePrice(),
                     badgeDTO.getSellingPrice(),
+                    badgeDTO.getPurchasePriceLiter(),
+                    badgeDTO.getSellingPriceLiter(),
                     badgeDTO.getQuantity(),
                     badgeDTO.getExpireDate(),
                     1,  // Status = Active
@@ -139,6 +141,8 @@ public class ItemServiceImpl implements ItemService {
                 existingBadge.setDescription(badgeDTO.getDescription());
                 existingBadge.setPurchasePrice(badgeDTO.getPurchasePrice());
                 existingBadge.setSellingPrice(badgeDTO.getSellingPrice());
+                existingBadge.setPurchasePriceLiter(badgeDTO.getPurchasePriceLiter());
+                existingBadge.setSellingPriceLiter(badgeDTO.getSellingPriceLiter());
                 existingBadge.setQuantity(badgeDTO.getQuantity());
                 existingBadge.setExpireDate(badgeDTO.getExpireDate());
 

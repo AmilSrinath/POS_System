@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -56,14 +57,15 @@
             </Button>
          </children>
       </AnchorPane>
-      <TableView fx:id="tblOrderHistory" layoutX="99.0" layoutY="252.0" prefHeight="675.0" prefWidth="1476.0" style="-fx-font-size: 16;">
+      <TableView fx:id="tblOrderHistory" layoutX="99.0" layoutY="268.0" prefHeight="659.0" prefWidth="1476.0" style="-fx-font-size: 16;">
          <columns>
             <TableColumn fx:id="colOrderID" prefWidth="215.0" text="ID" />
             <TableColumn fx:id="colCustomerID" prefWidth="213.0" text="Customer ID" />
-            <TableColumn fx:id="colCustomerName" prefWidth="399.0" text="Costomer Name" />
-            <TableColumn fx:id="colDate" prefWidth="240.0" text="Date" />
-            <TableColumn fx:id="colTotal" prefWidth="226.0" text="Total" />
-            <TableColumn fx:id="colUserID" prefWidth="181.0" text="User" />
+            <TableColumn fx:id="colCustomerName" prefWidth="399.0" text="Customer Name" />
+            <TableColumn fx:id="colDate" prefWidth="320.0" text="Date" />
+            <TableColumn fx:id="colTotal" prefWidth="179.0" text="Total" />
+            <TableColumn fx:id="colUserID" prefWidth="147.0" text="User" />
+            <TableColumn fx:id="colPaid" prefWidth="106.0" text="Paid" />
          </columns>
       </TableView>
       <Text layoutX="99.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search">
@@ -71,22 +73,42 @@
             <Font name="Poppins Regular" size="20.0" />
          </font>
       </Text>
-      <TextField fx:id="txtSearch" layoutX="189.0" layoutY="174.0" prefHeight="33.0" prefWidth="478.0">
+      <TextField fx:id="txtSearch" layoutX="196.0" layoutY="174.0" onKeyReleased="#SearchOnKeyReleased" prefHeight="39.0" prefWidth="471.0">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <DatePicker fx:id="datePickerFrom" layoutX="882.0" layoutY="174.0" style="-fx-font-size: 20;" />
+      <DatePicker fx:id="datePickerFrom" layoutX="882.0" layoutY="174.0" onAction="#datePickerFrom" style="-fx-font-size: 20;" />
       <Text layoutX="811.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From :">
          <font>
             <Font name="Poppins Regular" size="20.0" />
          </font>
       </Text>
-      <DatePicker fx:id="datePickerTo" layoutX="1266.0" layoutY="175.0" style="-fx-font-size: 20;" />
+      <DatePicker fx:id="datePickerTo" layoutX="1266.0" layoutY="175.0" onAction="#datePickerTo" style="-fx-font-size: 20;" />
       <Text layoutX="1224.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To :">
          <font>
             <Font name="Poppins Regular" size="20.0" />
          </font>
       </Text>
+      <Text fx:id="lblRowCount" layoutX="1412.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="163.0">
+         <font>
+            <Font name="Poppins Regular" size="20.0" />
+         </font>
+      </Text>
+      <CheckBox fx:id="checkOrderID" layoutX="218.0" layoutY="137.0" mnemonicParsing="false" text="Order ID">
+         <font>
+            <Font name="Poppins Regular" size="15.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="checkCustomerID" layoutX="337.0" layoutY="137.0" mnemonicParsing="false" text="Customer ID">
+         <font>
+            <Font name="Poppins Regular" size="15.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="checkCustomerName" layoutX="494.0" layoutY="137.0" mnemonicParsing="false" text="Customer Name">
+         <font>
+            <Font name="Poppins Regular" size="15.0" />
+         </font>
+      </CheckBox>
    </children>
 </AnchorPane>

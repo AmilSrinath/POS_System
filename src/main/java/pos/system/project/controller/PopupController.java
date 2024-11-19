@@ -3,7 +3,6 @@ package pos.system.project.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -149,27 +148,27 @@ public class PopupController {
         card.setPrefSize(600, 100);
 
         Label badgeIdLabel = new Label("Badge ID: " + badge.getBadgeId());
-        badgeIdLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+        badgeIdLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
         badgeIdLabel.setLayoutX(20);
         badgeIdLabel.setLayoutY(20);
 
         Label badgeStatusLabel = new Label("Badge Name: " + badge.getDescription());
-        badgeStatusLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+        badgeStatusLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
         badgeStatusLabel.setLayoutX(20);
         badgeStatusLabel.setLayoutY(50);
 
         Label quantityLabel = new Label("Quantity: " + badge.getQuantity());
-        quantityLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+        quantityLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
         quantityLabel.setLayoutX(20);
         quantityLabel.setLayoutY(80);
 
         Label priceLabel = new Label("Selling Price: " + badge.getSellingPrice());
-        priceLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+        priceLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
         priceLabel.setLayoutX(300);
         priceLabel.setLayoutY(20);
 
         Label expiryDateLabel = new Label("Expiry Date: " + badge.getExpireDate().toString());
-        expiryDateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+        expiryDateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 22px;");
         expiryDateLabel.setLayoutX(300);
         expiryDateLabel.setLayoutY(50);
 
@@ -212,22 +211,18 @@ public class PopupController {
                 if (item.getSellByStatus() == 1) {
                     dialog = new TextInputDialog();
                     dialog.setTitle("Enter Quantity");
-                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity());
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity() + "\nPrice: " + badge.getSellingPrice());
                     dialog.setContentText("Quantity:");
-                    dialog.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the dialog pane
+                    dialog.getDialogPane().setStyle("-fx-font-size: 22px;"); // Apply font size to the dialog pane
                 } else if (item.getSellByStatus() == 2) {
                     dialog.setTitle("Enter Quantity");
-                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() +
-                            "\nAvailable Stock: " + badge.getQuantity() + "g"
-                    );
-                    dialog.setContentText("Quantity:");
-                    dialog.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the dialog pane
+                    dialog.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity() + "g" + "\nPrice: " + badge.getSellingPrice());
+                    dialog.setContentText("Quantity(g):");
+                    dialog.getDialogPane().setStyle("-fx-font-size: 22px;"); // Apply font size to the dialog pane
                 } else if (item.getSellByStatus() == 3) { // Liquid
                     Dialog<String> customDialog = new Dialog<>();
                     customDialog.setTitle("Select Bottle Type");
-                    customDialog.setHeaderText("Choose bottle type for Badge ID: " + badge.getBadgeId() +
-                            "\nAvailable Stock: " + badge.getQuantity() + " bottles"
-                    );
+                    customDialog.setHeaderText("Choose bottle type for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity() + " bottles");
 
                     // Add buttons to the dialog
                     ButtonType bottleButton = new ButtonType("Bottle", ButtonBar.ButtonData.OK_DONE);
@@ -237,7 +232,7 @@ public class PopupController {
                     ButtonType cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
                     customDialog.getDialogPane().getButtonTypes().addAll(bottleButton, halfBottleButton, quarterBottleButton, otherButton, cancelButton);
-                    customDialog.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the custom dialog pane
+                    customDialog.getDialogPane().setStyle("-fx-font-size: 22px;"); // Apply font size to the custom dialog pane
 
                     // Handle button clicks
                     customDialog.setResultConverter(dialogButton -> {
@@ -264,22 +259,23 @@ public class PopupController {
                             orderController.quantity = BigDecimal.valueOf(4);
                             orderController.milliliters = 187.5;
                             orderController.status = 3;
+                            orderController.type = "QB";
                         } else if (bottleType.equals("Half Bottle")) {
                             orderController.quantity = BigDecimal.valueOf(2);
                             orderController.milliliters = 375;
                             orderController.status = 2;
+                            orderController.type = "QB";
                         } else if (bottleType.equals("Quarter Bottle")) {
                             orderController.quantity = BigDecimal.valueOf(1);
                             orderController.milliliters = 750;
                             orderController.status = 1;
+                            orderController.type = "QB";
                         } else if (bottleType.equals("Other")) {
                             TextInputDialog customDialog2 = new TextInputDialog();
                             customDialog2.setTitle("Enter Quantity");
-                            customDialog2.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() +
-                                    "\nAvailable Stock: " + badge.getQuantity() + " ml"
-                            );
+                            customDialog2.setHeaderText("Enter the quantity for Badge ID: " + badge.getBadgeId() + "\nAvailable Stock: " + badge.getQuantity() + " ml" + "\nPrice: " + badge.getSellingPrice());
                             customDialog2.setContentText("Quantity(litres):");
-                            customDialog2.getDialogPane().setStyle("-fx-font-size: 18px;"); // Apply font size to the dialog pane
+                            customDialog2.getDialogPane().setStyle("-fx-font-size: 22px;"); // Apply font size to the dialog pane
                             Optional<String> result2 = customDialog2.showAndWait();
                             result2.ifPresent(quantity -> {
                                 orderController.isLeter = true;
@@ -287,6 +283,7 @@ public class PopupController {
                                 orderController.quantity = new BigDecimal(quantity);
                                 orderController.milliliters = Double.parseDouble(quantity);
                                 orderController.status = 4;
+                                orderController.type = "L";
                             });
                         }
                     });

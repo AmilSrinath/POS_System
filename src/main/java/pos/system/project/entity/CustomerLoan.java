@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -14,23 +13,19 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-
 @Entity
-@Table(name = "customer")
-public class Customer {
+@Table(name = "customerLoan")
+public class CustomerLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int cusId;
-    private String cusName;
-    private String cusAddress;
-    @Column(unique = true)
-    private String nic;
-    @Column(unique = true)
-    private String cusPhone;
-    private LocalDate dob;
+    private int loanId;
+    private double loanAmount;
+    private Date date = new Date();
     private int status;
+    private String cusMobileNumber;
+    private String cusName;
 
     @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+    @JoinColumn(name = "cusId")
+    private Customer customer;
 }

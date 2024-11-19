@@ -26,11 +26,12 @@ public class Order {
     private double total;
     private double amountPaid;
     private double balance;
+    private int isPaid;
+    private String customerName;
 
     @ManyToOne
     @JoinColumn(name = "cusId")
     private Customer customer;
-    private String customerName;
 
     @ManyToOne
     @JoinColumn(name = "userId")

@@ -3,6 +3,7 @@ package pos.system.project.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import pos.system.project.dto.CategoryDTO;
 import pos.system.project.service.CategoryService;
 import pos.system.project.service.impl.CategoryServiceImpl;
@@ -25,5 +26,8 @@ public class AddCategoryController {
                         categoryName.getText(),
                         1
                 ));
+
+        Stage stage = (Stage) categoryName.getScene().getWindow();
+        stage.close();
     }
 }
