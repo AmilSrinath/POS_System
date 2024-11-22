@@ -42,16 +42,27 @@ public class LoginController {
             controller.setUserID(cusUsername.getText());
 
             stage.setScene(scene);
-//            stage.setResizable(false);
+            stage.setResizable(false);
             stage.show();
             root.getScene().getWindow().hide();
-        }else {
+        } else {
             new Alert(Alert.AlertType.ERROR, "Invalid Username or Password").show();
         }
     }
 
     @FXML
     public void lblFogotPasswordOnMouseClicked(MouseEvent mouseEvent) {
-
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fogotPassword.fxml"));
+            AnchorPane anchorPane = loader.load();
+            Scene scene = new Scene(anchorPane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+            root.getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

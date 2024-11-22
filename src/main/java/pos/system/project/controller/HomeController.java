@@ -124,7 +124,18 @@ public class HomeController {
 
     @FXML
     void btnLogOutOnAction(ActionEvent event) {
-
+        home.getScene().getWindow().hide();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login.fxml"));
+            AnchorPane anchorPane = loader.load();
+            Scene scene = new Scene(anchorPane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

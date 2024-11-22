@@ -16,4 +16,6 @@ public interface UserService {
     List<User> getAllUser() throws IOException;
     User getUserByUsername(String username) throws IOException;
     boolean checkCredentials(String username, String password) throws IOException;
+    boolean isUserExist(String text) throws IOException;
+    void resetPassword(String email, String text) throws IOException;
 }

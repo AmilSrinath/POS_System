@@ -3,6 +3,7 @@ package pos.system.project.service;
 import pos.system.project.dto.OrderDTO;
 import pos.system.project.dto.OrderDetailsDTO;
 import pos.system.project.entity.Order;
+import pos.system.project.entity.OrderDetail;
 
 import java.io.IOException;
 import java.time.LocalDate;

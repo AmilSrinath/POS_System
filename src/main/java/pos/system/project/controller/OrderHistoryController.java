@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -22,9 +23,12 @@ import java.util.List;
  * @author Amil Srinath
  */
 import pos.system.project.entity.Order;
+import pos.system.project.entity.OrderDetail;
 import pos.system.project.entity.tm.OrderHistoryTM;
+import pos.system.project.service.OrderDetailService;
 import pos.system.project.service.OrderHistoryService;
 import pos.system.project.service.OrderService;
+import pos.system.project.service.impl.OrderDetailServiceImpl;
 import pos.system.project.service.impl.OrderHistoryServiceImpl;
 import pos.system.project.service.impl.OrderServiceImpl;
 
@@ -79,11 +83,35 @@ public class OrderHistoryController {
 
     OrderService orderService = new OrderServiceImpl();
     ObservableList<Order> observableList;
+    OrderDetailService orderDetailService = new OrderDetailServiceImpl();
 
     public void initialize() throws IOException {
         datePickerFrom.setValue(LocalDate.now());
         datePickerTo.setValue(LocalDate.now());
         setDateFilter(LocalDate.now(), LocalDate.now());
+
+        // Setting cell factory for colPaid to apply color
+        colPaid.setCellFactory(column -> new TableCell<Order, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle(""); // Clear any style for empty cells
+                } else {
+                    setText(item);
+                    // Apply styles based on the item value
+                    if ("Paid".equals(item)) {
+                        setStyle("-fx-background-color: #109c10; -fx-text-fill: white;");
+                    } else if ("Not Paid".equals(item)) {
+                        setStyle("-fx-background-color: #ff3434; -fx-text-fill: white;");
+                    } else {
+                        setStyle(""); // Default style for any other value
+                    }
+                }
+            }
+        });
     }
 
     public void setDateFilter(LocalDate from, LocalDate to) throws IOException {
@@ -203,5 +231,20 @@ public class OrderHistoryController {
     @FXML
     public void datePickerTo(ActionEvent actionEvent) throws IOException {
         setDateFilter(datePickerFrom.getValue(), datePickerTo.getValue());
+    }
+
+    @FXML
+    public void tableOnMouseClicked(MouseEvent mouseEvent) throws IOException {
+        if (mouseEvent.getClickCount() == 2) {
+            Order order = tblOrderHistory.getSelectionModel().getSelectedItem();
+//            List<OrderDetail> orderDetailList = orderDetailService.getOrderHistoryByOrderId(order.getOrderId());
+
+            List<OrderDetail> orderDetails = order.getOrderDetails();
+
+            for (OrderDetail orderDetail : orderDetails) {
+                System.out.println(orderDetail);
+            }
+
+        }
     }
 }

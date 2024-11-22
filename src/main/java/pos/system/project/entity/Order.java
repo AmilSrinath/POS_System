@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +38,7 @@ public class Order {
     @JoinColumn(name = "userId")
     private User user;
 
-    // One order can have many order details
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ToString.Exclude // Prevent infinite recursion
     private List<OrderDetail> orderDetails;
 }

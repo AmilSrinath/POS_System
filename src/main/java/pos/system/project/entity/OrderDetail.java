@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -28,6 +29,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "orderId")
+    @ToString.Exclude // Prevent infinite recursion
     private Order order;
 
     @ManyToOne

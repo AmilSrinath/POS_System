@@ -151,4 +151,65 @@ public class UserServiceImpl implements UserService {
 
         return isValid;
     }
+
+    @Override
+    public boolean isUserExist(String text) throws IOException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = null;
+        boolean isValid = false;
+
+        try {
+            transaction = session.beginTransaction();
+
+            // HQL query to check for the username and password
+            String hql = "FROM User WHERE email = :email AND status = 1";
+            User user = session.createQuery(hql, User.class)
+                    .setParameter("email", text)
+                    .uniqueResult();
+
+            if (user != null) {
+                isValid = true;
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+        return isValid;
+    }
+
+    @Override
+    public void resetPassword(String email, String password) throws IOException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+
+            // Fetch user by email
+            User user = session.createQuery("FROM User WHERE email = :email", User.class)
+                    .setParameter("email", email)
+                    .uniqueResult();
+
+            if (user != null) {
+                user.setPassword(password);
+                session.update(user);
+                transaction.commit();
+            } else {
+                throw new IllegalArgumentException("User not found with email: " + email);
+            }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
 }
