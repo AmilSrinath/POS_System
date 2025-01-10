@@ -52,6 +52,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void saveOrderDetails(OrderDetailsDTO orderDetailsDTO) throws IOException {
+        System.out.println("DONE : "+orderDetailsDTO.getOrder());
+
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setQuantity(orderDetailsDTO.getQuantity());
         orderDetail.setSubTotal(orderDetailsDTO.getSubTotal());
@@ -61,7 +63,6 @@ public class OrderServiceImpl implements OrderService {
         orderDetail.setItem(orderDetailsDTO.getItem());
         orderDetail.setUser(orderDetailsDTO.getUser());
         orderDetail.setBadgeId(orderDetailsDTO.getBadgeId());
-
         Session session = null;
         Transaction transaction = null;
 
@@ -89,8 +90,6 @@ public class OrderServiceImpl implements OrderService {
         Session session = FactoryConfiguration.getInstance().getSession();
         Transaction transaction = null;
 
-        System.out.println(milliliter);
-
         try {
             transaction = session.beginTransaction();
             Badge badge = session.get(Badge.class, badgeId);
@@ -112,7 +111,6 @@ public class OrderServiceImpl implements OrderService {
                 badge.setQuantity(updatedQuantity);
                 session.update(badge);
                 transaction.commit();
-                System.out.println("Badge quantity updated successfully. Updated Quantity: " + updatedQuantity);
             }
         } catch (Exception e) {
             if (transaction != null) {

@@ -15,7 +15,7 @@
 
 <AnchorPane fx:id="orderForm" prefHeight="1024.0" prefWidth="1680.0" style="-fx-background-color: #fff;" styleClass="root" stylesheets="@../Styles/CSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pos.system.project.controller.OrderController">
    <children>
-      <TextField fx:id="itemBarcode" layoutX="257.0" layoutY="187.0" onAction="#itemBarcodeOnAction" prefHeight="33.0" prefWidth="1344.0">
+      <TextField fx:id="itemBarcode" layoutX="257.0" layoutY="187.0" onAction="#itemBarcodeOnAction" prefHeight="39.0" prefWidth="1303.0">
          <font>
             <Font size="20.0" />
          </font>
@@ -77,7 +77,7 @@
             <Font name="Poppins Regular" size="22.0" />
          </font>
       </Text>
-      <Button layoutX="1468.0" layoutY="904.0" mnemonicParsing="false" onAction="#PlaceOrderOnAction" prefHeight="42.0" prefWidth="173.0" style="-fx-background-color: #168aad;" text="Place Order(F12)" textFill="WHITE">
+      <Button layoutX="1468.0" layoutY="904.0" mnemonicParsing="false" onAction="#PlaceOrderOnAction" prefHeight="42.0" prefWidth="173.0" styleClass="home-buttons" text="Place Order(F12)" textFill="WHITE">
          <font>
             <Font name="Poppins Regular" size="18.0" />
          </font>
@@ -195,5 +195,17 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Label>
+      <Button fx:id="btnAddNewItem" layoutX="1576.0" layoutY="184.0" mnemonicParsing="false" onAction="#btnAddNewItemOnAction" prefHeight="46.0" prefWidth="91.0" styleClass="home-buttons" text="F9" textFill="WHITE">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../assest/icon/icons8-plus-240.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Poppins Regular" size="20.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

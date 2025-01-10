@@ -18,7 +18,7 @@ import java.util.Date;
 public class CustomerLoan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int loanId;
+    private Long loanId;
     private double loanAmount;
     private Date date = new Date();
     private int status;

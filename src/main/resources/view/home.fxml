@@ -40,7 +40,7 @@
                   <Font name="Poppins Regular" size="22.0" />
                </font>
             </Label>
-            <Label layoutX="1240.0" layoutY="35.0" text="12-12-2024" textFill="WHITE">
+            <Label fx:id="lblDate" layoutX="1240.0" layoutY="35.0" text="12-12-2024" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="22.0" />
                </font>
@@ -50,7 +50,7 @@
                   <Font name="Poppins Regular" size="22.0" />
                </font>
             </Label>
-            <Label layoutX="1489.0" layoutY="35.0" text="13:45" textFill="WHITE">
+            <Label fx:id="lblTime" layoutX="1489.0" layoutY="35.0" text="13:45" textFill="WHITE">
                <font>
                   <Font name="Poppins Regular" size="22.0" />
                </font>
@@ -144,7 +144,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="btnPayments" contentDisplay="TOP" layoutX="137.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPaymentsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Payments" textFill="WHITE">
+      <Button fx:id="btnPayments" contentDisplay="TOP" layoutX="137.0" layoutY="413.0" mnemonicParsing="false" onAction="#btnPaymentsOnAction" prefHeight="122.0" prefWidth="145.0" styleClass="home-buttons" text="Loan" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="72.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                <image>

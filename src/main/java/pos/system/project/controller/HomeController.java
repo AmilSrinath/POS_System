@@ -1,5 +1,6 @@
 package pos.system.project.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,8 @@ import pos.system.project.service.UserService;
 import pos.system.project.service.impl.UserServiceImpl;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author Amil Srinath
@@ -30,6 +33,10 @@ public class HomeController {
     @FXML
     public Label lblUsername;
     public Button btnOrderHistory;
+    @FXML
+    public Label lblDate;
+    @FXML
+    public Label lblTime;
 
     @FXML
     private Button btnConfiguration;
@@ -66,6 +73,27 @@ public class HomeController {
 
     private final Stage stage = new Stage();
     UserService userService = new UserServiceImpl();
+
+    public void initialize() throws IOException {
+        lblDate.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        TimeNow();
+    }
+
+    private void TimeNow(){
+        Thread thread = new Thread(() ->{
+            SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+            while (!false){
+                try {
+                    Thread.sleep(1000);
+                }catch (Exception e){}
+                final String timenow = sdf.format(new Date());
+                Platform.runLater(() ->{
+                    lblTime.setText(timenow);
+                });
+            }
+        });
+        thread.start();
+    }
 
     @FXML
     void btnConfigurationOnAction(ActionEvent event) throws IOException {

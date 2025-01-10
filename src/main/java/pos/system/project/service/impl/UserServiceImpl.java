@@ -212,4 +212,33 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public boolean isEmpty() throws IOException {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            // Open a session and begin a transaction
+            session = FactoryConfiguration.getInstance().getSession();
+            transaction = session.beginTransaction();
+
+            // Execute the query to count users
+            Long count = (Long) session.createNativeQuery("SELECT count(userId) FROM user where status = 1").getSingleResult();
+
+            // Commit the transaction
+            transaction.commit();
+
+            // Check if count is 0
+            return count == 0;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback(); // Rollback if something goes wrong
+            }
+            throw new IOException("Error checking if the user table is empty", e);
+        } finally {
+            if (session != null) {
+                session.close(); // Ensure session is always closed
+            }
+        }
+    }
+
 }

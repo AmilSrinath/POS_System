@@ -97,19 +97,15 @@
             <Font name="Poppins Regular" size="18.0" />
          </font>
       </Button>
-      <Button layoutX="1380.0" layoutY="217.0" mnemonicParsing="false" onAction="#EditOnAction" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #ffff3f;" text="Edit">
+      <Button layoutX="1380.0" layoutY="225.0" mnemonicParsing="false" onAction="#DeleteOnAction" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #fb6107;" text="Delete">
          <font>
             <Font name="Poppins Regular" size="18.0" />
          </font>
       </Button>
-      <Button layoutX="1380.0" layoutY="282.0" mnemonicParsing="false" onAction="#DeleteOnAction" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: #fb6107;" text="Delete">
-         <font>
-            <Font name="Poppins Regular" size="18.0" />
-         </font>
-      </Button>
-      <TableView fx:id="tblUser" layoutX="127.0" layoutY="500.0" onMouseClicked="#tableOnMouseClicked" prefHeight="471.0" prefWidth="1442.0" style="-fx-font-size: 16;">
+      <TableView fx:id="tblUser" layoutX="310.0" layoutY="499.0" onMouseClicked="#tableOnMouseClicked" prefHeight="471.0" prefWidth="984.0" style="-fx-font-size: 16;">
          <columns>
-            <TableColumn fx:id="colUsername" prefWidth="227.0" text="Username" />
+            <TableColumn fx:id="colUserID" prefWidth="165.0" text="ID" />
+            <TableColumn fx:id="colUsername" prefWidth="279.0" text="Username" />
             <TableColumn fx:id="colEmail" prefWidth="321.0" text="Email" />
             <TableColumn fx:id="colRole" prefWidth="217.0" text="Role" />
          </columns>
@@ -124,7 +120,7 @@
             <Font name="Poppins Regular" size="17.0" />
          </font>
       </Text>
-      <Button layoutX="1380.0" layoutY="352.0" mnemonicParsing="false" onAction="#ClearOnAction" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: lightblue;" text="Clear">
+      <Button layoutX="1380.0" layoutY="295.0" mnemonicParsing="false" onAction="#ClearOnAction" prefHeight="42.0" prefWidth="123.0" style="-fx-background-color: lightblue;" text="Clear">
          <font>
             <Font name="Poppins Regular" size="18.0" />
          </font>

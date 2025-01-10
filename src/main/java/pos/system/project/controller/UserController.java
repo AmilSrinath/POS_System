@@ -36,8 +36,12 @@ public class UserController {
 
     @FXML
     public Button btnBack;
+
     @FXML
     private ComboBox<String> cmbRole;
+
+    @FXML
+    public TableColumn<?, ?> colUserID;
 
     @FXML
     private TableColumn<?, ?> colEmail;
@@ -178,8 +182,8 @@ public class UserController {
             User user = tblUser.getSelectionModel().getSelectedItem();
             userName.setText(user.getUsername());
             userEmail.setText(user.getEmail());
-            userPassword.setText(user.getPassword());
-            userRePassword.setText(user.getPassword());
+//            userPassword.setText(user.getPassword());
+//            userRePassword.setText(user.getPassword());
             cmbRole.setValue(user.getRole());
             currentSelectedId = user.getUserId();
         }
@@ -211,6 +215,7 @@ public class UserController {
             }
         }
         tblUser.setItems(observableList);
+        colUserID.setCellValueFactory(new PropertyValueFactory<>("userId"));
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colRole.setCellValueFactory(new PropertyValueFactory<>("role"));

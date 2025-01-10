@@ -30,8 +30,7 @@ import pos.system.project.service.impl.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -79,6 +78,8 @@ public class OrderController {
     public int status;
     public String type;
     public AnchorPane orderForm;
+    @FXML
+    public Button btnAddNewItem;
 
     ItemService itemService = new ItemServiceImpl();
     BadgeService badgeService = new BadgeServiceImpl();
@@ -141,6 +142,8 @@ public class OrderController {
                         throw new RuntimeException(e);
                     }
                     break;
+                case F9:
+                    addOtherItems();
                 default:
                     // Handle other key events if needed
                     break;
@@ -166,12 +169,14 @@ public class OrderController {
                 if (item.getItemBarcode().equals(itemBarcode)) {
                     String base64Image = item.getImageUrl();
 
-                    byte[] imageBytes = Base64.getDecoder().decode(base64Image);
-                    ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
-                    Image image = new Image(bis);
+                    try {
+                        byte[] imageBytes = Base64.getDecoder().decode(base64Image);
+                        ByteArrayInputStream bis = new ByteArrayInputStream(imageBytes);
+                        Image image = new Image(bis);
 
-                    imageViews[i].setImage(image);
-                    break;
+                        imageViews[i].setImage(image);
+                        break;
+                    }catch (NullPointerException e){}
                 }
             }
         }
@@ -281,6 +286,8 @@ public class OrderController {
         return suggestions;
     }
 
+    public Customer customerByMobileNumber1 = null;
+
     @FXML
     public void btnBackOnAction(ActionEvent actionEvent) {
         btnBack.getScene().getWindow().hide();
@@ -324,56 +331,35 @@ public class OrderController {
         boolean isPaid = false;
 
         if (inputField.getText().isEmpty()) {
-            //Todo add or update customer
-
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mobileNumberEnter.fxml"));
-//            AnchorPane popupRoot = loader.load();
-//            MobileNumberEnterController mobileNumberEnterController = loader.getController();
-//            mobileNumberEnterController.setTotalAmount(lblTotal.getText());
-//            Stage stage = new Stage();
-//            stage.setScene(new Scene(popupRoot));
-//            stage.initModality(Modality.APPLICATION_MODAL);
-//            stage.show();
-
-
+            // Handle case when the input field is empty
             Dialog<String> mobileNumberDialog = new Dialog<>();
 
-// Create a TextField for mobile number input with inline CSS for font size
             TextField txtMobileNumber = new TextField();
             txtMobileNumber.setPromptText("Enter Mobile Number");
-            txtMobileNumber.setStyle("-fx-font-size: 22px;"); // Set font size to 22px
+            txtMobileNumber.setStyle("-fx-font-size: 22px;");
 
-// Create a Label for displaying customer information (optional) with inline CSS for font size
             Label lblCustomerName = new Label();
-            lblCustomerName.setStyle("-fx-font-size: 22px;"); // Set font size to 22px
-            lblCustomerName.setText(""); // Initially empty, you can populate this based on input
+            lblCustomerName.setStyle("-fx-font-size: 22px;");
 
-// Create a VBox to arrange TextField and Label
             Label lblCustomerMobileNumber = new Label("Customer Mobile Number:");
-            lblCustomerMobileNumber.setStyle("-fx-font-size: 22px;"); // Set font size to 22px
+            lblCustomerMobileNumber.setStyle("-fx-font-size: 22px;");
 
-            VBox vboxContent = new VBox(10); // spacing of 10 between elements
+            VBox vboxContent = new VBox(10);
             vboxContent.setAlignment(Pos.CENTER);
             vboxContent.getChildren().addAll(lblCustomerMobileNumber, txtMobileNumber, lblCustomerName);
 
-// Set the VBox as the content of the dialog
             mobileNumberDialog.getDialogPane().setContent(vboxContent);
 
-// Add buttons to the dialog
             ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
             mobileNumberDialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
 
             txtMobileNumber.setOnKeyReleased(event -> {
                 try {
-                    Customer customerByMobileNumber1 = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
-                    if (customerByMobileNumber1 != null) {
-                        if (customerByMobileNumber1.getCusName() != null){
-                            lblCustomerName.setText(customerByMobileNumber1.getCusName());
-                            lblCustomerName.setStyle("-fx-text-fill: red; -fx-font-size: 23px;");
-                        }else {
-                            lblCustomerName.setText("No Name");
-                        }
-                    }else {
+                    Customer customer = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
+                    if (customer != null) {
+                        lblCustomerName.setText(customer.getCusName() != null ? customer.getCusName() : "No Name");
+                        lblCustomerName.setStyle("-fx-text-fill: red; -fx-font-size: 23px;");
+                    } else {
                         lblCustomerName.setText("");
                     }
                 } catch (IOException e) {
@@ -381,52 +367,55 @@ public class OrderController {
                 }
             });
 
-// Request focus for the text field
             Platform.runLater(() -> txtMobileNumber.requestFocus());
 
-// Handle the input when the OK button is pressed
             mobileNumberDialog.setResultConverter(dialogButton -> {
                 if (dialogButton == okButtonType) {
-                    // Todo add or update customer
+                    String enteredMobileNumber = txtMobileNumber.getText();
+                    if (enteredMobileNumber.isEmpty()) {
+                        lblCustomerName.setText("No customer found");
+                        return null;
+                    }
+
                     Customer customer = null;
                     try {
-                        customer = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                    CustomerLoan customerLoan = new CustomerLoan();
-                    customerLoan.setLoanAmount(Double.parseDouble(lblTotal.getText()));
-                    customerLoan.setStatus(1);
-                    try {
-                        customerByMobileNumber = customerService.getCustomerByMobileNumber(txtMobileNumber.getText());
+                        customer = customerService.getCustomerByMobileNumber(enteredMobileNumber);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
 
                     if (customer != null) {
-                        // Todo add customerLoan row
+                        CustomerLoan customerLoan = new CustomerLoan();
+                        customerLoan.setLoanAmount(Double.parseDouble(lblTotal.getText()));
+                        customerLoan.setStatus(1);
                         customerLoan.setCustomer(customer);
-                        customerLoan.setCusMobileNumber(txtMobileNumber.getText());
+                        customerLoan.setCusMobileNumber(enteredMobileNumber);
                         customerLoan.setCusName(customer.getCusName());
+
+                        customerByMobileNumber1 = customer;
+
                         try {
                             customerLoanService.saveLoan(customerLoan);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     } else {
-                        // Todo add customer and customerLoan
                         CustomerDTO customerDTO = new CustomerDTO();
-                        customerDTO.setCusPhone(txtMobileNumber.getText());
+                        customerDTO.setCusPhone(enteredMobileNumber);
                         try {
-                            customerByMobileNumber = customerService.Add(customerDTO);
+                            customer = customerService.Add(customerDTO);
+                            customerByMobileNumber1 = customer;
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
-                        try {
-                            customerLoan.setCustomer(customerService.getCustomerByMobileNumber(txtMobileNumber.getText()));
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
+
+                        CustomerLoan customerLoan = new CustomerLoan();
+                        customerLoan.setLoanAmount(Double.parseDouble(lblTotal.getText()));
+                        customerLoan.setStatus(1);
+                        customerLoan.setCustomer(customer);
+                        customerLoan.setCusMobileNumber(enteredMobileNumber);
+                        customerLoan.setCusName(customer.getCusName());
+
                         try {
                             customerLoanService.saveLoan(customerLoan);
                         } catch (IOException e) {
@@ -434,71 +423,56 @@ public class OrderController {
                         }
                     }
 
-                    // Optionally, you can perform any logic you need here
-                    String enteredMobileNumber = txtMobileNumber.getText();
-                    if (!enteredMobileNumber.isEmpty()) {
-                        // Process the entered mobile number (e.g., update a label)
-                        lblCustomerName.setText("Mobile Number Entered: " + enteredMobileNumber);
-                        return enteredMobileNumber;
-                    }
+                    return enteredMobileNumber;
                 }
-                return null;
+                return null; // If Cancel button is pressed, return null and don't add the order
             });
 
-// Show the dialog and wait for response
-            mobileNumberDialog.showAndWait();
-
-
-        }else {
+            Optional<String> result = mobileNumberDialog.showAndWait();
+            if (result.isEmpty()) {
+                return; // If "Cancel" is clicked, we exit the method without saving the order
+            }
+        } else {
+            // Process order if amount is provided
             amount = Double.parseDouble(inputField.getText());
             double tot = Double.parseDouble(lblTotal.getText());
-            cash = amount-tot;
+            cash = amount - tot;
             isPaid = true;
 
-            //Cash Dialog
             Dialog<String> cashDialog = new Dialog<>();
-
-            // Create and style the label
             Label cashLbl = new Label("Cash: " + cash);
             cashLbl.setStyle("-fx-text-fill: #31ca07; -fx-font-size: 30px; -fx-font-weight: bold;");
 
-            // Create a VBox and add the label
             VBox vboxCash = new VBox(cashLbl);
             vboxCash.setSpacing(50);
-            vboxCash.setAlignment(Pos.CENTER); // Center align content inside the VBox
+            vboxCash.setAlignment(Pos.CENTER);
 
-            // Set size of the dialog's content
-            vboxCash.setPrefSize(300, 130); // Width = 300px, Height = 130px
+            vboxCash.setPrefSize(300, 130);
 
-            // Add content to the dialog
             cashDialog.getDialogPane().setContent(vboxCash);
-            cashDialog.getDialogPane().setPrefSize(350, 150); // Optional: Set size of DialogPane
+            cashDialog.getDialogPane().setPrefSize(350, 150);
             cashDialog.getDialogPane().setContent(vboxCash);
 
             cashDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK);
-
-            // Show the dialog
             cashDialog.show();
         }
+
         itemBarcode.requestFocus();
 
         List<OrderTM> items = tblOrder.getItems();
-
         if (items.isEmpty()) {
             showErrorDialog("Error", "Please add item to order");
             return;
         }
-
 
         OrderDTO order = new OrderDTO();
         order.setTotal(Double.parseDouble(lblTotal.getText()));
         order.setAmountPaid(amount);
         order.setBalance(cash);
         order.setUser(HomeController.user);
-        order.setCustomer(customerByMobileNumber);
-        order.setCustomerName(customerByMobileNumber.getCusName());
 
-        System.out.println("Cussss : "+customerByMobileNumber);
+        order.setCustomer(customerByMobileNumber1);
+        order.setCustomerName(customerByMobileNumber1 != null ? customerByMobileNumber1.getCusName() : "Unknown");
 
         if (isPaid) {
             order.setIsPaid(1);
@@ -507,22 +481,25 @@ public class OrderController {
         }
 
         Order saveOrder = orderService.saveOrder(order);
+        System.out.println("<><> : "+saveOrder);
+        customerByMobileNumber1 = null;
 
         for (OrderTM item : items) {
             OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+            orderDetailsDTO.setOrder(saveOrder);
+            orderDetailsDTO.setUser(HomeController.user);
+            orderDetailsDTO.setSubTotal(item.getSubTotal());
 
             for (Badge badge : badgeList) {
                 if (badge.getBadgeId() == item.getBadgeId()) {
                     orderDetailsDTO.setQuantity(item.getQuantity());
-                    orderDetailsDTO.setOrder(saveOrder);
-                    orderDetailsDTO.setUser(HomeController.user);
                     orderDetailsDTO.setItem(badge.getItem());
-                    orderDetailsDTO.setSubTotal(item.getSubTotal());
                     orderDetailsDTO.setItemPrice(item.getUnitPrice());
                     orderDetailsDTO.setBadgeId(badge.getBadgeId());
                     orderDetailsDTO.setItemType(item.getType());
                 }
             }
+            System.out.println("Get Order : "+orderDetailsDTO.getOrder());
             orderService.saveOrderDetails(orderDetailsDTO);
         }
 
@@ -532,9 +509,6 @@ public class OrderController {
 
         itemList = itemService.getAllItems();
         badgeList = badgeService.getAllBadges();
-
-//        tblOrder.getItems().clear();
-//        lblTotal.setText("0.00");
     }
 
     @FXML
@@ -602,7 +576,7 @@ public class OrderController {
             return;
         }
 
-        if (item.getSellByStatus() == 1) {
+        if (item.getSellByStatus() == 1){
             for (OrderTM orderTM : tblOrder.getItems()) {
                 if (orderTM.getBadgeId() == badge.getBadgeId()) {
                     double qty = orderTM.getQuantity();
@@ -670,7 +644,6 @@ public class OrderController {
             setLblTotal();
         } else if (item.getSellByStatus() == 3) {
             if (isLeter && milliliters > 0) {
-                System.out.println("AAAAAAA");
                 OrderTM orderTM = new OrderTM();
                 orderTM.setItemBarcode(item.getItemBarcode());
                 orderTM.setItemName(badge.getDescription());
@@ -685,7 +658,6 @@ public class OrderController {
                 orderTM.setSubTotal(subTotal.doubleValue());
                 tblOrder.getItems().add(orderTM);
             } else if (milliliters > 0) {
-                System.out.println("BBBBBBBB");
                 OrderTM orderTM = new OrderTM();
                 orderTM.setItemBarcode(item.getItemBarcode());
                 orderTM.setItemName(badge.getDescription());
@@ -864,5 +836,27 @@ public class OrderController {
     public void F8OnAction(ActionEvent actionEvent) {
         shortCutID = 8;
         showShortCutDialog();
+    }
+
+    @FXML
+    public void btnAddNewItemOnAction(ActionEvent actionEvent) {
+        addOtherItems();
+    }
+
+    public void addOtherItems() {
+        TextInputDialog customDialog2 = new TextInputDialog();
+        customDialog2.setTitle("Enter Price");
+        customDialog2.setHeaderText("Enter Item Price: ");
+        customDialog2.setContentText("Item Price : ");
+        customDialog2.getDialogPane().setStyle("-fx-font-size: 22px;");
+        Optional<String> result2 = customDialog2.showAndWait();
+        result2.ifPresent(quantity -> {
+            String s = result2.get();
+
+            OrderTM orderTM = new OrderTM();
+            orderTM.setItemName("Other");
+            orderTM.setSubTotal(Double.parseDouble(s));
+            tblOrder.getItems().add(orderTM);
+        });
     }
 }

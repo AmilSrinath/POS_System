@@ -18,4 +18,5 @@ public interface UserService {
     boolean checkCredentials(String username, String password) throws IOException;
     boolean isUserExist(String text) throws IOException;
     void resetPassword(String email, String text) throws IOException;
+    boolean isEmpty() throws IOException;
 }
