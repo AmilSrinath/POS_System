@@ -3,6 +3,8 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -51,5 +53,12 @@
             </Button>
          </children>
       </AnchorPane>
+      <TableView fx:id="tblCustomerLoan" layoutX="348.0" layoutY="275.0" onMouseClicked="#tableOnMouseClicked" prefHeight="652.0" prefWidth="985.0" style="-fx-font-size: 16;">
+         <columns>
+            <TableColumn fx:id="colName" prefWidth="283.0" text="Name" />
+            <TableColumn fx:id="colMobileNo" prefWidth="380.0" text="Mobile No" />
+            <TableColumn fx:id="colTotalAmount" prefWidth="319.0" text="Total Amount" />
+         </columns>
+      </TableView>
    </children>
 </AnchorPane>

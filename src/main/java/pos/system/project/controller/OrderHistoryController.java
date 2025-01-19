@@ -13,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -242,9 +243,24 @@ public class OrderHistoryController {
             List<OrderDetail> orderDetails = order.getOrderDetails();
 
             for (OrderDetail orderDetail : orderDetails) {
-                System.out.println(orderDetail);
+                System.out.println(orderDetail.getOrderDetailId());
             }
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/selectOrderDetails.fxml"));
+            AnchorPane anchorPane = loader.load();
+
+            SelectOrderDetailsController controller = loader.getController();
+            controller.setOrderDetails(orderDetails);
+
+            Scene scene = new Scene(anchorPane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(btnBack.getScene().getWindow());
+
+            stage.setResizable(false);
+            stage.show();
         }
     }
 }
